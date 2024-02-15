@@ -44,7 +44,7 @@ sudo -u $HAZEL_USER make -j $(nproc)
 sudo -u $HAZEL_USER make install
 
 # TODO: check if nginx is installed first
-cat <<'EOF' | sudo tee /etc/nginx/conf.d/hazel.conf
+cat <<EOF | sudo tee /etc/nginx/conf.d/hazel.conf
 # Hazel
 server {
     listen 443 ssl http2;
@@ -56,7 +56,7 @@ server {
         proxy_set_header   X-Real-IP $remote_addr;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   Host $host;
-        proxy_pass         http://localhost:6905/;
+        proxy_pass         http://localhost:6906/;
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
         proxy_set_header   Connection "upgrade";

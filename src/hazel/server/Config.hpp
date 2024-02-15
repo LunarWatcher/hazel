@@ -34,7 +34,7 @@ struct MinifluxProxy {
 struct ServerConfig {
     uint16_t port;
     
-    ServerConfig() : port(6905) {}
+    ServerConfig() : port(6906) {}
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(ServerConfig,
         port

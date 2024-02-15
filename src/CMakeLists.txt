@@ -48,5 +48,10 @@ install(
         PATTERN *.so*
         PATTERN *.a EXCLUDE
 )
+# For when there's actual web content
+#install(
+    #DIRECTORY www
+    #DESTINATION .
+#)
 
 # vim:ft=cmake
