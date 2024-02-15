@@ -11,5 +11,6 @@ void hazel::InitWebCore(HazelCore &server) {
 
 void hazel::webcoreHealth(HazelCore&, crow::request&, crow::response& res) {
     res.code = 200;
-    res.end();
+    HAZEL_HTML(res);
+    res.end("LunarWatcher/Hazel");
 }
