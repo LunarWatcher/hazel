@@ -6,7 +6,6 @@ set -e
 
 cd /opt
 sudo mkdir hazel
-git clone https://github.com/LunarWatcher/hazel
 
 # Gotta love shell
 echo "Using username ${HAZEL_USER:=hazel}"
@@ -26,6 +25,7 @@ fi
 set -e
 
 sudo chown -R $HAZEL_USER /opt/hazel
+git clone https://github.com/LunarWatcher/hazel
 cd /opt/hazel
 
 sudo -u $HAZEL_USER mkdir build
