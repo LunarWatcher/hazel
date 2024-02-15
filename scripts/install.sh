@@ -39,7 +39,7 @@ server {
     listen 443 ssl http2;
     server_name hazel.${HAZEL_DOMAIN:-FIXME};
     ssl_certificate         ${HAZEL_CERT:-FIXME};
-    ssl_certificate_key     ${HAZEL_CERT:-FIXME};
+    ssl_certificate_key     ${HAZEL_CERT_KEY:-FIXME};
 
     location / {
         proxy_set_header   X-Real-IP $remote_addr;
