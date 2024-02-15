@@ -4,6 +4,7 @@ set (SOURCE_FILES
 
     # Endpoints
     hazel/features/miniflux/MinifluxProxy.cpp
+    hazel/features/WebCore.cpp
 
     # Utils
     hazel/json/JsonImpl.cpp

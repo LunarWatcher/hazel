@@ -2,6 +2,11 @@
 set -x
 set -e
 
+# TODO:
+# * use venv to get CMake >= 3.28
+# * More checks for existence prior to running stuff
+
+
 cd /opt
 sudo mkdir hazel
 
@@ -21,6 +26,7 @@ else
     echo "If it isn't, you have 10 seconds to press ctrl-c to abort the installation."
     echo "Using an existing user is fine, but may have security implications in the event of"
     echo "a security breach. It's strongly recommended to use a dedicated user for the server"
+    echo "NOTE: If you're rerunning the install script to update hazel, don't. Use /opt/hazel/scripts/update.sh instead."
     set -x
     sleep 10
 fi
@@ -29,7 +35,7 @@ sudo chown -R $HAZEL_USER /opt/hazel
 sudo -u $HAZEL_USER git clone https://github.com/LunarWatcher/hazel
 cd /opt/hazel
 
-# TODO check if debian and run the dep script
+# TODO check if debian and run the dependency script
 
 sudo -u $HAZEL_USER mkdir build
 cd build
