@@ -26,7 +26,8 @@ else
     echo "If it isn't, you have 10 seconds to press ctrl-c to abort the installation."
     echo "Using an existing user is fine, but may have security implications in the event of"
     echo "a security breach. It's strongly recommended to use a dedicated user for the server"
-    echo "NOTE: If you're rerunning the install script to update hazel, don't. Use /opt/hazel/scripts/update.sh instead."
+    echo "NOTE: If you're rerunning the install script to update hazel, and the existing user _is_ for this server, don't."
+    echo "Use /opt/hazel/scripts/update.sh instead."
     set -x
     sleep 10
 fi
@@ -53,16 +54,16 @@ server {
     ssl_certificate_key     ${HAZEL_CERT_KEY:-FIXME};
 
     location / {
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP \$remote_addr;
+        proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header   Host \$host;
         proxy_pass         http://localhost:6906/;
         proxy_http_version 1.1;
-        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Upgrade \$http_upgrade;
         proxy_set_header   Connection "upgrade";
 
         # Required for HTTP basic auth services
-        proxy_set_header   Authorization $http_authorization;
+        proxy_set_header   Authorization \$http_authorization;
         proxy_pass_header  Authorization;
     }
 }

@@ -51,7 +51,11 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
     auto proxyIt = conf.miniflux_proxies.find(username);
     if (proxyIt == conf.miniflux_proxies.end() || proxyIt->second.passphrase != password) {
         res.code = 404;
-        spdlog::info("{} attempted to access undefined webhook", req.remote_ip_address);
+        if (proxyIt == conf.miniflux_proxies.end()) {
+            spdlog::info("{} attempted to access undefined webhook ({})", req.remote_ip_address, username);
+        } else {
+            spdlog::info("{} failed to log into {}", req.remote_ip_address, username);
+        }
         HAZEL_JSON(res);
         res.end(R"({"message": "Webhook not found"})");
         return;
