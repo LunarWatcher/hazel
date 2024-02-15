@@ -1,8 +1,6 @@
 #!/usr/bin/bash
-# Not sure if these unset themselves when excuted from a subprocess
 set -x
 set -e
-# TODO check if debian and run the dep script
 
 cd /opt
 sudo mkdir hazel
@@ -14,23 +12,30 @@ echo "Using username ${HAZEL_USER:=hazel}"
 set +e
 id -u $HAZEL_USER
 if [[ $? != 0 ]]; then
-    useradd --system --user-group --home-dir / --shell /sbin/nologin $HAZEL_USER
+    set -e
+    sudo useradd --system --user-group --home-dir / --shell /sbin/nologin $HAZEL_USER
 else
-    echo "$HAZEL_USER already exists. It's assumed this is correct."
+    set -e
+    set +x
+    echo "User $HAZEL_USER already exists. It's assumed this is correct."
     echo "If it isn't, you have 10 seconds to press ctrl-c to abort the installation."
     echo "Using an existing user is fine, but may have security implications in the event of"
     echo "a security breach. It's strongly recommended to use a dedicated user for the server"
+    set -x
     sleep 10
 fi
-set -e
 
 sudo chown -R $HAZEL_USER /opt/hazel
-git clone https://github.com/LunarWatcher/hazel
+sudo -u $HAZEL_USER git clone https://github.com/LunarWatcher/hazel
 cd /opt/hazel
+
+# TODO check if debian and run the dep script
 
 sudo -u $HAZEL_USER mkdir build
 cd build
-sudo -u $HAZEL_USER cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/hazel/dist/ && make -j $(nproc) && make install
+sudo -u $HAZEL_USER cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/hazel/dist/ 
+sudo -u $HAZEL_USER make -j $(nproc)
+sudo -u $HAZEL_USER make install
 
 # TODO: check if nginx is installed first
 cat <<'EOF' | sudo tee /etc/nginx/conf.d/hazel.conf
