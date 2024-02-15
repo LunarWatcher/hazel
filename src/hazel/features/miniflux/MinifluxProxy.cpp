@@ -63,7 +63,7 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
 
     // TODO error handling
     nlohmann::json data = nlohmann::json::parse(req.body);
-    spdlog::info("{}", data.dump());
+    //spdlog::info("{}", data.dump());
     auto evType = data.at("event_type").get<std::string>();
 
     if (proxyIt->second.isEventEnabled(evType)) {
