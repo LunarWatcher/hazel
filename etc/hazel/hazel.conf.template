@@ -1,0 +1,11 @@
+{
+    "miniflux_proxies": {   
+        "some_username_used_as_an_internal_identifier": {
+            "events": ["new_entries"],
+            "passphrase": "A password",
+            "receiverUrl": "https://example.com/webhook",
+            "secret": "currently unused; see the docs for what it will be for",
+            "format": "discord"
+        }
+    }
+}

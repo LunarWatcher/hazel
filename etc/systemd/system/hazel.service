@@ -1,0 +1,15 @@
+[Unit]
+Description=Homelab metaserver
+Wants=network-online.target
+After=network.target
+
+[Service]
+Restart=on-failure
+RestartSec=60s
+Type=idle
+WorkingDirectory=/opt/hazel/dist
+ExecStart=/opt/hazel/dist/bin/hazel
+User=hazel
+
+[Install]
+WantedBy=multi-user.target
