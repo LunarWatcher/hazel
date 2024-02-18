@@ -6,6 +6,10 @@ set (SOURCE_FILES
     hazel/features/miniflux/MinifluxProxy.cpp
     hazel/features/WebCore.cpp
 
+    # Adapters
+    hazel/automation/adapters/DiscordAdapter.cpp
+    hazel/automation/adapters/NtfyAdapter.cpp
+
     # Utils
     hazel/json/JsonImpl.cpp
 

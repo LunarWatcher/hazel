@@ -63,45 +63,25 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
 
     // TODO error handling
     nlohmann::json data = nlohmann::json::parse(req.body);
+    auto& proxy = proxyIt->second;
+
     //spdlog::info("{}", data.dump());
     auto evType = data.at("event_type").get<std::string>();
+    auto adapter = conf.adapters.at(proxy.adapter);
+    auto adapterConfig = proxyIt->second.adapter_config.value_or(nlohmann::json{});
 
     if (proxyIt->second.isEventEnabled(evType)) {
-        auto& proxy = proxyIt->second;
         spdlog::info("Forwarding webhook from {} (IP: {})", username, req.remote_ip_address);
 
         if (data.contains("entry")) {
             auto entry = data.at("entry");
-            auto pr = _detail::minifluxPublish(proxy, entry);
-            if (!pr.has_value()) {
-                spdlog::error("Failed to parse entry");
+            auto url = entry.at("url");
+            adapter->execute(url, adapterConfig);
 
-                HAZEL_JSON(res);
-                res.code = 400;
-                res.end(R"({"message": "Unknown format"})");
-                return;
-            } else if (pr->status_code >= 400) {
-                spdlog::error("Failed to parse or send entry {}: {}", data.at("feed").at("id").get<int>(), pr->text);
-
-                HAZEL_JSON(res);
-                res.code = 400;
-                res.end(R"({"message": "Unknown format"})");
-                return;
-            }
         } else if (data.contains("entries")) {
             for (auto& entry : data.at("entries")) {
-                auto pr = _detail::minifluxPublish(proxy, entry);
-                // TODO: make sure to return a bad code if there is a sufficient number:tm: of failures
-                if (!pr.has_value()) {
-                    spdlog::error("Failed to parse entry");
-
-                    HAZEL_JSON(res);
-                    res.code = 400;
-                    res.end(R"({"message": "Unknown format"})");
-                    return;
-                } else if (pr->status_code >= 400) {
-                    spdlog::error("Failed to parse or send entry {}: {}", data.at("feed").at("id").get<int>(), pr->text);
-                }
+                auto url = entry.at("url");
+                adapter->execute(url, adapterConfig);
             }
 
         } else {
@@ -120,28 +100,3 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
     res.end(R"({"message": "ok"})");
 }
 
-std::optional<cpr::Response> hazel::_detail::minifluxPublish(const MinifluxProxy& proxy, const nlohmann::json& entry) {
-    auto data = _detail::minifluxParse(proxy, entry);
-    if (!data.has_value()) {
-        return std::nullopt;
-    }
-    return cpr::Post(
-        cpr::Url{proxy.receiverUrl},
-        cpr::Header{{"Content-Type", "application/json"}},
-        cpr::Body{data->dump()}
-    );
-}
-
-std::optional<nlohmann::json> hazel::_detail::minifluxParse(const MinifluxProxy& proxy, const nlohmann::json& entry) {
-    auto url = entry.value("url", "");
-    if (url == "") {
-        return std::nullopt;
-    }
-    if (proxy.format == "discord") {
-        return nlohmann::json {
-            {"username", "Miniflux via Hazel"},
-            {"content", url}
-        };
-    } 
-    return std::nullopt;
-}

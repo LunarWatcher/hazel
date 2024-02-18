@@ -1,3 +1,5 @@
+#include "hazel/automation/adapters/DiscordAdapter.hpp"
+#include "hazel/automation/adapters/NtfyAdapter.hpp"
 #include <hazel/server/Config.hpp>
 
 void hazel::from_json(const nlohmann::json& i, Config& o) {
@@ -6,5 +8,26 @@ void hazel::from_json(const nlohmann::json& i, Config& o) {
     } 
     if (i.contains("miniflux_proxies")) {
         i.at("miniflux_proxies").get_to(o.miniflux_proxies);
+    }
+
+    if (i.contains("adapters")) {
+        for (auto& [adapterId, conf] : i.at("adapters").items()) {
+            auto& type = conf.at("type");
+            if (type == "discord") {
+                o.adapters.insert({
+                    adapterId,
+                    std::make_shared<DiscordAdapter>(
+                        conf
+                    )
+                });
+            } else if (type == "ntfy") {
+                o.adapters.insert({
+                    adapterId,
+                    std::make_shared<NtfyAdapter>(
+                        conf
+                    )
+                });
+            }
+        }
     }
 }

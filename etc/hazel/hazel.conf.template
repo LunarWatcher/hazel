@@ -1,11 +1,37 @@
 {
+    "adapters": {
+        "discord-webhook-1": {
+            "type": "discord",
+            "dest_url": "https://discord.com/...",
+            "username": "Hazel"
+        },
+        "ntfy-server-1": {
+            "type": "ntfy",
+            "dest_url": "https://ntfy.sh/...",
+            "default_topic": "alerts",
+            "api_token": "generate with ntfy token add"
+        }
+    },
     "miniflux_proxies": {   
         "some_username_used_as_an_internal_identifier": {
             "events": ["new_entries"],
             "passphrase": "A password",
-            "receiverUrl": "https://example.com/webhook",
             "secret": "currently unused; see the docs for what it will be for",
-            "format": "discord"
+            "adapter": "discord-webhook-1"
+        },
+        "some_username_used_as_an_internal_identifier2": {
+            "events": ["new_entries"],
+            "passphrase": "A password",
+            "secret": "currently unused; see the docs for what it will be for",
+            "adapter": "ntfy-server-1",
+            "adapter_config": {
+                "title": "New feed entry",
+                "priority": 3,
+                "topic": "someTopic"
+            }
         }
+    },
+    "server": {
+        "port": 6906
     }
 }

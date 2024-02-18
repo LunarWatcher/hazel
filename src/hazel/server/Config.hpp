@@ -1,9 +1,12 @@
 #pragma once
 
+#include "hazel/automation/Adapter.hpp"
 #include "nlohmann/detail/macro_scope.hpp"
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
+
+#include <hazel/json/SerialiserImpl.hpp>
 
 namespace hazel {
 
@@ -13,8 +16,9 @@ namespace hazel {
 struct MinifluxProxy {
     std::vector<std::string> events;
     std::string passphrase;
-    std::string receiverUrl;
-    std::string format;
+    std::string adapter;
+    std::string secret;
+    std::optional<nlohmann::json> adapter_config;
 
     bool isEventEnabled(const std::string& ev) const {
         return std::find(events.begin(), events.end(), ev) != events.end();
@@ -23,8 +27,9 @@ struct MinifluxProxy {
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(MinifluxProxy,
         events,
         passphrase,
-        receiverUrl,
-        format
+        secret,
+        adapter,
+        adapter_config
     );
 };
 
@@ -47,6 +52,8 @@ struct ServerConfig {
 struct Config {
     std::map<std::string, MinifluxProxy> miniflux_proxies;
     ServerConfig server;
+
+    std::map<std::string, std::shared_ptr<Adapter>> adapters;
 
 };
 

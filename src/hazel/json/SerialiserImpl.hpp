@@ -16,3 +16,4 @@ struct adl_serializer<std::optional<T>> {
         }
     }
 };
+}
