@@ -37,8 +37,7 @@ void NtfyAdapter::execute(const std::string& content, const nlohmann::json& adap
         url,
         body,
         headers,
-        cpr::VerifySsl(0),
-        cpr::Verbose(true)
+        cpr::VerifySsl(0)
     );
     spdlog::info("{}", res.text);
     if (res.status_code >= 400 && res.status_code >= 100) {
