@@ -16,12 +16,15 @@ void NtfyAdapter::execute(const std::string& content, const nlohmann::json& adap
     auto topic = adapterConfig.value("topic", defaultTopic);
     auto priority = adapterConfig.value("priority", 3);
     auto title = adapterConfig.value("title", "Hazel update");
+
     cpr::Header headers;
+
     if (adapterConfig.contains("tags")) {
         headers["Tags"] = adapterConfig.at("tags");
     }
     headers["Priority"] = std::to_string(priority);
     headers["Title"] = title;
+
     headers["Content-Type"] = "application/x-www-form-urlencoded";
     cpr::Body body{content};
     auto url = cpr::Url {

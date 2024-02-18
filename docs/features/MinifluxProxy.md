@@ -7,14 +7,17 @@ The miniflux proxy is a metafeature that defines the webhook `username:password@
 Note that this particular feature is primarily meant to be a way to forward the URL, as a direct replacement for [an old feed reader I wrote](https://github.com/LunarWatcher/DiscordWebhooks.cpp), that had a severe bug (that I have yet to identify, because I couldn't be bothered) that periodically wiped config.
 
 ## Config
-```
+```json
 "miniflux_proxies": {   
     "some_username_used_as_an_internal_identifier": {
         "events": ["new_entries"],
         "passphrase": "A password",
         "receiverUrl": "https://example.com/webhook",
         "secret": "",
-        "format": "discord"
+        "adapter": "adapter_id",
+        "adapter_config": {
+            "Optional; depends on the exact adapter being used. See docs/internals/Adapter.md"
+        }
     }
 }
 ```
@@ -25,4 +28,5 @@ Note that this particular feature is primarily meant to be a way to forward the 
 * `passphrase`: A password used to protect the endpoint. It's more of an API key 
 * `secret`: Miniflux' generated webhook secret, as seen in integrations. Will be used for validation if non-empty. Currently, no validation is implemented, so the secret is not required nor used, but reserved for future use.
     * It's strongly recommended to set it, as it means there's an additional layer of security if the username and/or password are weak, and the server is poorly protected.
-* `format`: Currently, only "discord" is allowed.
+* `adapter`: The adapter to use for output. **WARNING:** The adapter is defined elsewhere and must be defined prior to using the Miniflux proxy system. See `docs/internals/Adapter.md`.
+* `adapter_config`: Optional additional config for the adapter. The config options available here depend on which adapter type is used. Note that this is only used for per-application overrides of the standard options, and is not required. It is, however, usually desirable to use it.
