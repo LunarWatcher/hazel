@@ -8,5 +8,5 @@ Internal metaserver for my homelab. It's going to be a while before it's general
  * A Linux-based server
  * C++20 compiler
  * CMake 3.28 (Pro tip: [CMake is available via pip](https://pypi.org/project/cmake/))
- * libpq-dev, libuuid-dev, libasio-dev (Debian-based names; look up your distro's package manager for the applicable packages). Additional dependencies are sourced automagically during the build process
+ * libpq-dev, uuid-dev, libasio-dev (Debian-based names; look up your distro's package manager for the applicable packages). Additional dependencies are sourced automagically during the build process
  * Postgresql
