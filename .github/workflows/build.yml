@@ -13,7 +13,6 @@ jobs:
         with:
           python-version: '3.12' 
       - name: Install deps
-        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt update && sudo apt upgrade -y
           sudo apt install -y libuuid-dev libasio-dev libpq-dev postgresql
