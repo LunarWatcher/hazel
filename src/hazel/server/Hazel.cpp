@@ -80,7 +80,7 @@ void HazelCore::run(bool test) {
 #ifdef HAZEL_DEBUG
             1337
 #else
-            6906
+            conf.server.port
 #endif
         );
 
