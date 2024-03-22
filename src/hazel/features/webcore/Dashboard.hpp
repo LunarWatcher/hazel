@@ -8,6 +8,6 @@ namespace hazel {
 class HazelCore;
 
 extern void InitDashboard(HazelCore& server);
-extern void getIndex(HazelCore& server, crow::request& req, crow::response& res);
+extern void webcoreIndex(HazelCore& server, crow::request& req, crow::response& res);
 
 }

@@ -5,6 +5,7 @@ set (SOURCE_FILES
     # Endpoints
     hazel/features/miniflux/MinifluxProxy.cpp
     hazel/features/WebCore.cpp
+    hazel/features/webcore/Dashboard.cpp
 
     # Adapters
     hazel/automation/adapters/DiscordAdapter.cpp

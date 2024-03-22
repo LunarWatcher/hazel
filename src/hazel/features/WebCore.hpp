@@ -2,7 +2,6 @@
 
 #include "cpr/response.h"
 #include "hazel/server/Config.hpp"
-#include "nlohmann/json_fwd.hpp"
 #include <crow.h>
 #include <nlohmann/json.hpp>
 
