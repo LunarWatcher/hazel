@@ -30,4 +30,15 @@ void hazel::from_json(const nlohmann::json& i, Config& o) {
             }
         }
     }
+
+    if (i.contains("dashboard")) {
+        i.at("dashboard").get_to(o.dashboard);
+    }
 }
+
+void hazel::from_json(const nlohmann::json& i, DashboardConfig& o) {
+    if (i.contains("links")) {
+        i.at("links").get_to(o.links);
+    }
+}
+

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hazel/automation/Adapter.hpp"
+#include "hazel/data/DashboardStructs.hpp"
 #include "nlohmann/detail/macro_scope.hpp"
 #include <string>
 #include <vector>
@@ -46,17 +47,32 @@ struct ServerConfig {
     );
 };
 
+struct DashboardLink {
+    std::optional<LinkDynamicApp> link_type;
+    std::string link_name,
+        url;
+    std::optional<nlohmann::json> link_config;
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(DashboardLink, link_type, link_name, url, link_config);
+};
+
+struct DashboardConfig {
+    std::vector<DashboardLink> links;
+
+};
+
 /**
  * Combined config struct
  */
 struct Config {
-    std::map<std::string, MinifluxProxy> miniflux_proxies;
     ServerConfig server;
+    DashboardConfig dashboard;
 
+    std::map<std::string, MinifluxProxy> miniflux_proxies;
     std::map<std::string, std::shared_ptr<Adapter>> adapters;
 
 };
 
 extern void from_json(const nlohmann::json& i, Config& o);
+extern void from_json(const nlohmann::json& i, DashboardConfig& o);
 
 }
