@@ -14,6 +14,10 @@ set (SOURCE_FILES
     # Utils
     hazel/json/JsonImpl.cpp
 
+    # Dashboard stuff
+    hazel/data/DashboardDataProvider.cpp
+    hazel/data/dashboard/DashboardUpdaters.cpp
+
     # Server (just the core shit)
     hazel/server/Hazel.cpp
 )

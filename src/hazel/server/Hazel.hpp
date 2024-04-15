@@ -3,6 +3,7 @@
 
 #include <hazel/meta/Typedefs.hpp>
 #include "Config.hpp"
+#include "hazel/data/DashboardDataProvider.hpp"
 
 #include <chrono>
 #include <memory>
@@ -22,7 +23,7 @@ private:
 
     std::string assetBaseDir;
     bool sslEnabled;
-
+    std::shared_ptr<DashboardDataProvider> dashData;
 
     HazelCore();
 
@@ -53,6 +54,10 @@ public:
     }
 
     bool isSSLEnabled() { return sslEnabled; }
+
+    DashboardDataProvider& getDashData() { 
+        return *dashData;
+    }
 
     static HazelCore& getInstance() {
         static HazelCore server;

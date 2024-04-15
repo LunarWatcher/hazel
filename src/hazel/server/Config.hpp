@@ -2,7 +2,6 @@
 
 #include "hazel/automation/Adapter.hpp"
 #include "hazel/data/DashboardStructs.hpp"
-#include "nlohmann/detail/macro_scope.hpp"
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
@@ -48,11 +47,10 @@ struct ServerConfig {
 };
 
 struct DashboardLink {
-    std::optional<LinkDynamicApp> link_type;
-    std::string link_name,
+    LinkDynamicApp type;
+    std::string name,
         url;
-    std::optional<nlohmann::json> link_config;
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(DashboardLink, link_type, link_name, url, link_config);
+    std::optional<nlohmann::json> config;
 };
 
 struct DashboardConfig {
@@ -74,5 +72,6 @@ struct Config {
 
 extern void from_json(const nlohmann::json& i, Config& o);
 extern void from_json(const nlohmann::json& i, DashboardConfig& o);
+extern void from_json(const nlohmann::json& i, DashboardLink& o);
 
 }

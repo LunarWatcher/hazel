@@ -1,7 +1,10 @@
 #pragma once
 
 #include "hazel/data/DashboardStructs.hpp"
+#include "hazel/server/Config.hpp"
+#include "hazel/sync/RWContainer.hpp"
 #include <optional>
+#include <thread>
 #include <shared_mutex>
 #include <nlohmann/json.hpp>
 
@@ -16,12 +19,17 @@ private:
      */
     DashboardData dataArchive;
 
-    std::shared_mutex lock;
+    RWContainer<std::string> jsonCache;
 
-    std::string cachedJson;
+    /**
+     * The thread in charge of running the update() function
+     */
+    std::thread updateProcessor;
 
     void update();
 public:
+    DashboardDataProvider(DashboardConfig& conf);
+
     std::string getJsonData();
 };
 

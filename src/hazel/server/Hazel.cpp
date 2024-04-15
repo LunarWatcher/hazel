@@ -21,6 +21,9 @@ HazelCore::HazelCore() {
     }
 
     conf = nlohmann::json::parse(ifs);
+    dashData = std::make_shared<DashboardDataProvider>(
+        conf.dashboard
+    );
 }
 
 void HazelCore::bootstrapDatabase() {
