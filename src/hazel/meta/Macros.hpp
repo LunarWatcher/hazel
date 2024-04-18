@@ -20,7 +20,7 @@
 })
 
 #define HAZEL_REDIRECT(from, to) CROW_ROUTE(server.getApp(), from)([&](crow::response& res) { \
-    res.redirect(to); \
+    res.moved_perm(to); \
     res.end(); \
 });
 
