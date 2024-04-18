@@ -90,4 +90,4 @@ function updateDashboard() {
 }
 
 updateDashboard();
-setInterval(updateDashboard, 6000);
+setInterval(updateDashboard, 60000);
