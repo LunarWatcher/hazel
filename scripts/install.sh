@@ -58,7 +58,10 @@ server {
         proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header   Host \$host;
         proxy_pass         http://localhost:6906/;
-        # Required to prevent downgrades diring redirects
+        # Required to prevent downgrades during redirects
+        # This is caused by an oddity in how Crow handles redirects. See
+        #     https://github.com/CrowCpp/Crow/blob/ad337a8a868d1d6bc61e9803fc82f36c61f706de/include/crow/http_connection.h#L257
+        # for the code in question
         proxy_redirect     http://$host/ https://$host/;
         proxy_http_version 1.1;
         proxy_set_header   Upgrade \$http_upgrade;
