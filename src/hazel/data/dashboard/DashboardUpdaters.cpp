@@ -62,7 +62,7 @@ void Updaters::Links::updatePihole(DashboardLinkModule& link) {
     auto& fields = link.fields;
     fields["Queries today"] = std::to_string(json.at("dns_queries_today").get<long long>());
     fields["Blocked today"] = std::to_string(json.at("ads_blocked_today").get<long long>());
-    fields["Blocked percent"] = std::to_string(json.at("ads_percentage_today").get<long long>());
+    fields["Blocked percent"] = std::to_string(json.at("ads_percentage_today").get<double>()) + "%";
 }
 void Updaters::Links::updateMiniflux(DashboardLinkModule& link) {
 }

@@ -78,7 +78,7 @@ void DashboardDataProvider::update() {
             });
         }
         if (sleepTime == std::numeric_limits<long long>::max()) {
-            spdlog::warn("sleepTime is the max long value. The dashboard probably doesn't have anything in it that needs updates. Stopping update thread");
+            spdlog::warn("sleepTime is the max long value. The dashboard probably doesn't have anything in it that needs updates. Stopping update thread. If this is wrong, please open a bug report: https://github.com/LunarWatcher/hazel/issues/");
             break;
         }
         spdlog::debug("Dashboard data refreshed (dirty = {}). Sleeping for {}", dirty, sleepTime);
