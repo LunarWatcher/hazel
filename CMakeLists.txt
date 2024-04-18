@@ -89,11 +89,13 @@ else()
 endif()
 add_definitions(-DHAZEL_VERSION="${HAZEL_VERSION}")
 # }}}
+add_definitions(-DCROW_ENFORCE_WS_SPEC=1)
 
 add_subdirectory(src)
+add_subdirectory(tests EXCLUDE_FROM_ALL)
 
-#add_custom_target(test
-    #COMMAND tests
-    #DEPENDS tests
-    #COMMENT "Test hazel")
+add_custom_target(test
+    COMMAND tests
+    DEPENDS tests
+    COMMENT "Test hazel")
 # vim:ft=cmake

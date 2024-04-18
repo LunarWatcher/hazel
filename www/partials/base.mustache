@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <meta http-equiv="Content-language" content="en-GB"/>
+
+        <title>{{ Title }} | Hazel</title>
+        <script async src="/assets/base.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="/assets/style.css" />
+    </head>
+    <body>
+        {{>partials/header.mustache}}
+        <main>
+            <div class="container">
+                {{&Content}}
+            </div>
+        </main>
+        {{>partials/footer.mustache}}
+    </body>
+</html>
+{{!
+vim:ft=mustache
+}}

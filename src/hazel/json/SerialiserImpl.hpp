@@ -1,3 +1,5 @@
+#pragma once
+
 #include "nlohmann/adl_serializer.hpp"
 #include <nlohmann/json.hpp>
 #include <optional>

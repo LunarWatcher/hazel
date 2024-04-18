@@ -1,0 +1,156 @@
+:root {
+    --colour-primary: #C8B575;
+
+    --colour-secondary: #3D2B56;
+    --colour-secondary-light: #5100C4;
+    --colour-secondary-light-110: #A362FF;
+
+    --colour-accent-text: var(--colour-secondary-light);
+    --colour-accent-text-light: var(--colour-secondary);
+    --colour-accent-text-light-110: var(--colour-secondary-light-110);
+}
+
+body {
+    /* Clear default margin for the body */
+    margin: 0;
+    min-height: 100vh;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "nav"
+    "main"
+    "footer";
+}
+nav a {
+    text-decoration: none;
+}
+
+.theme-background {
+    width: 100%;
+    background-color: var(--colour-primary);
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+.theme-background * {
+    margin: 0;
+}
+
+.small-paragraphs p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Content width container {{{*/
+.container {
+    width: 90%;
+    margin: 0 auto;
+}
+@media only screen and (min-width: 600px) {
+    .container {
+        width: 85%;
+    }
+}
+@media only screen and (min-width: 990px) {
+    .container {
+        width: 70%;
+    }
+}
+/*}}}*/
+/* Base element styles {{{ */
+code {
+    background-color: #e3e3e3;
+    padding: 3px;
+    border-radius: 2px;
+}
+
+a {
+    color: var(--colour-accent-text);
+}
+a:visited {
+    color: var(--colour-accent-text-light);
+}
+a:hover {
+    color: var(--colour-accent-text-light-110);
+}
+/* }}} */
+/* Extended element styles {{{ */
+.sneaky-list {
+    list-style: none;
+    padding-left: 0;
+}
+/* }}} */
+/* Grids {{{ */
+.column2-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+/* }}}*/
+/* Flexboxes {{{ */
+.flex-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1 0 auto;
+}
+
+.flex-horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex: 1 0 auto;
+}
+/* }}}*/
+/* Links {{{ */ 
+.link-container {
+    box-sizing: border-box;
+    border-radius: 5px;
+    max-width: 300px;
+    border: 2px solid var(--colour-primary);
+}
+.link-container > a {
+    text-decoration: none;
+    /* No gaps between the logo and the link content, mainly to 
+     * make sure the border between the link title and fields
+     * doesn't look out of place
+     */
+    gap: 0px;
+    height: 100%;
+}
+.link-top {
+    padding: 5px;
+    box-sizing: border-box;
+}
+.link-fields {
+    gap: 0px;
+}
+
+.field-title {
+    font-size: 0.8em;
+    text-align: center;
+}
+.field-value {
+    font-size: 0.7em;
+    text-align: center;
+}
+
+.link-field {
+    border-top: 2px solid var(--colour-primary);
+    box-sizing: border-box;
+    padding: 1px;
+}
+.link-fields:hover, .link-fields:visited, .link-fields {
+    color: black;
+    text-decoration: none;
+}
+
+.link-field:not(:nth-last-child(1)) {
+    border-right: 2px solid var(--colour-primary);
+}
+
+.link-title {
+    font-size: 1.3em;
+    text-decoration: underline;
+}
+
+/* }}} */

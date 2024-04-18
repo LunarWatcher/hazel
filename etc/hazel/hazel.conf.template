@@ -31,6 +31,19 @@
             }
         }
     },
+    "dashboard": {
+        "links": [
+            {
+                "name": "Pihole",
+                "type": "pihole",
+                "url": "https://pihole.lan",
+                "config": {
+                    "api_key": "abcd69420",
+                    "update_frequency": 600
+                }
+            }
+        ]
+    },
     "server": {
         "port": 6906
     }
