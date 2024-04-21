@@ -2,7 +2,7 @@ function refreshLinks(links) {
     let targetContainer = document.getElementById("links");
     if (targetContainer == null) {
         console.log("Failed to get link container");
-        return;
+        return false;
     }
 
     for (let link of links) {
@@ -74,6 +74,8 @@ function refreshLinks(links) {
         }
 
     }
+
+    return true;
 }
 
 function updateDashboard() {
@@ -83,11 +85,17 @@ function updateDashboard() {
             return res.json();
         })
         .then((json) => {
+            let anyFound = false;
             if ("links" in json && json["links"] != null) {
-                refreshLinks(json["links"]);
+                anyFound = refreshLinks(json["links"]) || anyFound;
+            }
+
+            if (!anyFound) {
+                console.log("No elements found; killing interval");
+                clearInterval(dashInterval);
             }
         });
 }
 
 updateDashboard();
-setInterval(updateDashboard, 60000);
+var dashInterval = setInterval(updateDashboard, 60000);

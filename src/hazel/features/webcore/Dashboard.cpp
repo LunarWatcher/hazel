@@ -23,9 +23,13 @@ void hazel::InitDashboard(HazelCore &server) {
 
 }
 
-void hazel::webcoreIndex(HazelCore &, crow::request &, crow::response &res) {
+void hazel::webcoreIndex(HazelCore& server, crow::request &, crow::response &res) {
     crow::mustache::context ctx;
-
+    ctx["HasLinks"] = server
+        .getConfig()
+        .dashboard
+        .links
+        .size() > 0;
     HAZEL_WEBPAGE(res, ctx, "index.mustache", "Dashboard");
 
     res.end();
