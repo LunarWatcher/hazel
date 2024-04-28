@@ -12,7 +12,7 @@ function refreshLinks(links) {
             // Link container
             elem = targetContainer.appendChild(document.createElement("div"));
             elem.setAttribute("data-title", link.title);
-            elem.classList.add("small-paragraphs", "link-container");
+            elem.classList.add("small-paragraphs", "link-container", "flex-item");
 
             // Logo and content container
             let titleLink = elem.appendChild(document.createElement("a"));
@@ -21,10 +21,11 @@ function refreshLinks(links) {
 
             
             let left = titleLink.appendChild(document.createElement("div"));
-            left.classList.add("link-logo");
+            left.classList.add("link-logo", "flex-item");
+
 
             let right = titleLink.appendChild(document.createElement("div"));
-            right.classList.add("link-content");
+            right.classList.add("link-content", "flex-item");
 
             let top = right.appendChild(document.createElement("div"));
             top.classList.add("link-top");
@@ -58,15 +59,22 @@ function refreshLinks(links) {
                 if (fieldElem == null) {
                     fieldElem = fieldContainer.appendChild(document.createElement("div"));
                     fieldElem.classList.add("link-field");
+                    fieldElem.setAttribute("data-field-title", field);
+
                     let title = fieldElem.appendChild(document.createElement("p"));
-                    title.setAttribute("data-field-title", field);
                     title.innerText = field;
                     title.classList.add("field-title");
 
                     let valueField = fieldElem.appendChild(document.createElement("p"));
                     valueField.classList.add("field-value");
                 }
-                fieldElem.getElementsByClassName("field-value")[0].innerText = value;
+                let valueElem = fieldElem.getElementsByClassName("field-value");
+                if (valueElem == null || valueElem.length == 0) {
+                    console.error(valueElem);
+                    console.error(fieldElem);
+                    continue;
+                }
+                valueElem[0].innerText = value;
             }
         } else {
             // Wipe fields if the server suddenly returns none

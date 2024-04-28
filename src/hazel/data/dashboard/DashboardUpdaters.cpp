@@ -1,5 +1,6 @@
 #include "DashboardUpdaters.hpp"
 #include "cpr/ssl_options.h"
+#include "fmt/core.h"
 #include "hazel/data/DashboardStructs.hpp"
 #include <limits>
 #include <cpr/cpr.h>
@@ -28,7 +29,6 @@ bool Updaters::updateLinks(DashboardData& data, long long& waitSecs) {
                 continue;
             }
             dirty = true;
-                spdlog::info("here");
 
             // Update time. Compute waitSecsc as the min wait time
             waitSecs = std::min(waitSecs, (long long) link.updateFrequency.count());
@@ -60,9 +60,11 @@ void Updaters::Links::updatePihole(DashboardLinkModule& link) {
     auto json = nlohmann::json::parse(data.text);
 
     auto& fields = link.fields;
-    fields["Queries today"] = std::to_string(json.at("dns_queries_today").get<long long>());
-    fields["Blocked today"] = std::to_string(json.at("ads_blocked_today").get<long long>());
-    fields["Blocked percent"] = std::to_string(json.at("ads_percentage_today").get<double>()) + "%";
+    fields["Blocked today"] = fmt::format("{}/{} ({:.1f}%)",
+        json.at("ads_blocked_today").get<long long>(),
+        json.at("dns_queries_today").get<long long>(),
+        json.at("ads_percentage_today").get<double>()
+    );
 }
 void Updaters::Links::updateMiniflux(DashboardLinkModule& link) {
 }
