@@ -13,6 +13,7 @@ Checks: >
   -bugprone-easily-swappable-parameters,
   -bugprone-exception-escape,
   -clang-analyzer-optin.core.EnumCastOutOfRange,
+  -clang-diagnostic-unused-parameter,
   -misc-non-private-*,
   -misc-const-correctness,
   -misc-include-cleaner,
