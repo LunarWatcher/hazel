@@ -17,6 +17,7 @@ void hazel::InitDashboard(HazelCore &server) {
         (HAZEL_CALLBACK_BINDING(webcoreDashboardData));
 
     HAZEL_STATIC_ASSET("style.css");
+
     HAZEL_STATIC_ASSET("base.js");
     
     HAZEL_STATIC_PAGE("open-source.html", "Open-source licenses");
@@ -25,11 +26,11 @@ void hazel::InitDashboard(HazelCore &server) {
 
 void hazel::webcoreIndex(HazelCore& server, crow::request &, crow::response &res) {
     crow::mustache::context ctx;
-    ctx["HasLinks"] = server
+    ctx["HasLinks"] = !server
         .getConfig()
         .dashboard
         .links
-        .size() > 0;
+        .empty();
     HAZEL_WEBPAGE(res, ctx, "index.mustache", "Dashboard");
 
     res.end();

@@ -19,7 +19,7 @@ private:
 
     Config conf;
 
-    Server app = {};
+    Server app;
 
     std::string assetBaseDir;
     bool sslEnabled;
@@ -29,7 +29,7 @@ private:
 
 public:
 
-    const double startedAt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
+    const long long startedAt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
         .time_since_epoch()).count();
 
     void bootstrapDatabase();

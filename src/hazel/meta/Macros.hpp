@@ -29,17 +29,17 @@
     ctx["Version"] = HAZEL_VERSION;
 
 #define HAZEL_WEBPAGE(res, ctx, contentPartial, title) \
-    ctx["Title"] = (std::string) title; \
+    (ctx)["Title"] = (std::string) title; \
     HAZEL_COMMON_CONTEXT(ctx); \
     /* Why the actual fuck is a capture required to make this work? */ \
-    ctx["Content"] = [&](std::string&) { \
+    (ctx)["Content"] = [&](std::string&) { \
         return std::string("{{>" contentPartial "}}"); \
     }; \
-    res.body = crow::mustache::load("partials/base.mustache").render_string(ctx); \
+    (res).body = crow::mustache::load("partials/base.mustache").render_string(ctx); \
     HAZEL_HTML(res);
 
 #define HAZEL_STATIC_PAGE(filename, title) CROW_ROUTE(server.getApp(), "/" filename)([&](crow::response& res) { \
     crow::mustache::context ctx; \
     HAZEL_WEBPAGE(res, ctx, filename, title); \
-    res.end(); \
+    (res).end(); \
 })

@@ -37,10 +37,11 @@ void NtfyAdapter::execute(const std::string& content, const nlohmann::json& adap
         url,
         body,
         headers,
-        cpr::VerifySsl(0)
+        // TODO: make configurable
+        cpr::VerifySsl(false)
     );
     spdlog::info("{}", res.text);
-    if (res.status_code >= 400 && res.status_code >= 100) {
+    if (res.status_code >= 400 || res.status_code < 100) {
         spdlog::error("Failed to push to Ntfy ({}): {}", res.url.str(), res.text);
     }
 }

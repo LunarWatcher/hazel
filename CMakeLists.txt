@@ -7,6 +7,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+option (LINT "Whether or not to enable clang-tidy checks" OFF)
+option (LINT_WARNINGS_ARE_ERRORS "Whether or not to set -warnings-as-errors" OFF)
+option (SANITISE "Whether or not to enable -fsanitize=undefined" OFF)
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     message(FATAL_ERROR "MacOS? Really? No. Get a real OS. https://www.youtube.com/watch?v=_6dbNzFD0zM")
 elseif (NOT WIN32)
@@ -32,30 +36,36 @@ include (FetchContent)
 # and doesn't support std::optional out of the box :facedesk:
 FetchContent_Declare(pqxx
     GIT_REPOSITORY https://github.com/jtv/libpqxx
-    GIT_TAG 7.8.1
+    GIT_TAG 7.9.2
     EXCLUDE_FROM_ALL
 )
 FetchContent_Declare(crowcpp
-    GIT_REPOSITORY https://github.com/CrowCpp/Crow)
+    GIT_REPOSITORY https://github.com/CrowCpp/Crow
+    GIT_TAG v1.2.0
+)
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG 9.1.0)
+    GIT_TAG 11.0.2
+)
 FetchContent_Declare(cpr
     GIT_REPOSITORY https://github.com/libcpr/cpr.git
-    GIT_TAG 1.10.0
+    GIT_TAG 1.10.5
     EXCLUDE_FROM_ALL
 )
 FetchContent_Declare(nlohmann
     GIT_REPOSITORY https://github.com/nlohmann/json
-    GIT_TAG v3.11.2)
+    GIT_TAG v3.11.2
+)
 FetchContent_Declare(spdlog
     GIT_REPOSITORY https://github.com/gabime/spdlog
-    GIT_TAG v1.11.0)
+    GIT_TAG v1.14.1
+)
 FetchContent_Declare(stc
-    GIT_REPOSITORY https://github.com/LunarWatcher/stc)
+    GIT_REPOSITORY https://github.com/LunarWatcher/stc
+)
 FetchContent_Declare(cli11
     GIT_REPOSITORY https://github.com/CLIUtils/CLI11
-    GIT_TAG main
+    GIT_TAG v2.4.2
 )
 
 # Must be included before asio [not currently applicable, as asio is an external system dependency now]
@@ -73,6 +83,10 @@ FetchContent_MakeAvailable(cli11)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAZEL_DEBUG")
+endif()
+
+if (SANITISE)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
 endif()
 
 # Set up versioning {{{

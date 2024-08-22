@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hazel/meta/Typedefs.hpp"
+#include "nlohmann/detail/macro_scope.hpp"
 #include <hazel/json/SerialiserImpl.hpp>
 #include <nlohmann/json.hpp>
 
@@ -16,6 +17,13 @@ enum class LinkDynamicApp {
      */
     _None
 };
+
+enum class StatModuleTypes {
+    SELF_STATS,
+    SERVICE_STATS,
+    SYS_STATS
+};
+
 NLOHMANN_JSON_SERIALIZE_ENUM(
     LinkDynamicApp,
     {
@@ -23,6 +31,15 @@ NLOHMANN_JSON_SERIALIZE_ENUM(
         {LinkDynamicApp::Pihole, "pihole"},
         {LinkDynamicApp::UptimeKuma, "uptime-kuma"},
         {LinkDynamicApp::_None, "__UNDEFINED__"},
+    }
+);
+
+NLOHMANN_JSON_SERIALIZE_ENUM(
+    StatModuleTypes,
+    {
+        {StatModuleTypes::SELF_STATS, "self_stats"},
+        {StatModuleTypes::SYS_STATS, "sys_stats"},
+        {StatModuleTypes::SERVICE_STATS, "service_stats"}
     }
 );
 

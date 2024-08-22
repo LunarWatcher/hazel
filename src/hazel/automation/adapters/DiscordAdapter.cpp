@@ -22,7 +22,7 @@ void DiscordAdapter::execute(const std::string& content, const nlohmann::json& a
         cpr::Body{body.dump()}
     );
 
-    if (res.status_code >= 400 && res.status_code >= 100) {
+    if (res.status_code >= 400 || res.status_code < 100) {
         spdlog::error("Failed to push to Discord webhook: {}", res.text);
     }
 }

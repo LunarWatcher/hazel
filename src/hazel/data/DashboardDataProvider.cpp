@@ -8,7 +8,7 @@
 namespace hazel {
 
 DashboardDataProvider::DashboardDataProvider(DashboardConfig& conf) {
-    if (conf.links.size()) {
+    if (!conf.links.empty()) {
         std::vector<DashboardLinkModule> links;
         for (auto& link : conf.links) {
             long long updateFreq = 60;

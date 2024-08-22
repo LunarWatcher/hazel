@@ -104,9 +104,14 @@ a:hover {
     flex-wrap: wrap;
 }
 
+.flex-nogap {
+    gap: 0;
+}
+
 .flex-item {
     flex: 1 1 auto;
 }
+
 /* }}}*/
 /* Links {{{ */ 
 .link-container {
@@ -176,4 +181,32 @@ a:hover {
     }
 }
 
+/* }}} */
+/* Components {{{ */
+/* Sidebar {{{ */
+.sidebar {
+    width: 45px;
+    margin: 0;
+
+    height: 100%;
+
+    background-color: var(--colour-secondary);
+}
+
+.sidebar > li:hover {
+    background-color: var(--colour-secondary);
+    filter: brightness(120%);
+}
+
+.sidebar > li {
+    width: 100%;
+    aspect-ratio: 1/1;
+    display: inline-flex;
+    align-items: center;
+}
+.sidebar > li > a {
+    margin: 0 auto;
+}
+
+/* }}} */
 /* }}} */

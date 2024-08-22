@@ -12,7 +12,7 @@ void hazel::from_json(const nlohmann::json& i, Config& o) {
     }
 
     if (i.contains("adapters")) {
-        for (auto& [adapterId, conf] : i.at("adapters").items()) {
+        for (const auto& [adapterId, conf] : i.at("adapters").items()) {
             auto& type = conf.at("type");
             if (type == "discord") {
                 o.adapters.insert({

@@ -11,6 +11,8 @@
 #include <stc/StringUtil.hpp>
 #include <cpr/cpr.h>
 
+#include <openssl/evp.h>
+
 void hazel::InitMinifluxProxy(HazelCore& server) {
     CROW_ROUTE(server.getApp(), "/api/miniflux/webhook")
         .methods(crow::HTTPMethod::POST)
@@ -20,23 +22,41 @@ void hazel::InitMinifluxProxy(HazelCore& server) {
 
 void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::response& res) {
     auto auth = req.get_header_value("Authorization"); // Thank you httpbin
-    if (auth == "" || !auth.starts_with("Basic ")) {
+    if (auth.empty() || !auth.starts_with("Basic ")) {
         res.code = 400;
         HAZEL_JSON(res);
         res.end("{\"message\": \"Malformed or missing authorization header\"}");
         return;
     }
 
-    auto b64 = auth.substr(auth.find(' '));
+    auto b64 = auth.substr(auth.find(' ') + 1);
 
-    const auto pl = (int) (3 * b64.size() / 4);
-    auto output = reinterpret_cast<unsigned char *>(calloc(pl + 1, 1));
-    const auto ol = EVP_DecodeBlock(output, reinterpret_cast<const unsigned char *>(b64.c_str()), b64.size());
+    if (b64.size() % 4 != 0) {
+        res.code = 400;
+        HAZEL_JSON(res);
+        res.end(R"s({"message": "Malformed or missing authorization header. (Did you correctly base64 encode?)"})s");
+        return;
+    }
 
-    std::string sOut = reinterpret_cast<char*>(output);
+    // "For every 4 input bytes exactly 3 output bytes will be produced"
+    // Hence the magic 3 / 4 division.
+    // b64 is guaranteed to be divisible by 4 as well
+    const auto pl = (int) std::ceil(3 * b64.size() / 4);
+    //auto *output = reinterpret_cast<unsigned char *>(calloc(pl + 1, 1));
+    std::basic_string<unsigned char> output(pl, '\0');
+    const auto ol = EVP_DecodeBlock(
+        output.data(),
+        reinterpret_cast<const unsigned char *>(b64.c_str()),
+        (int) b64.size()
+    );
+    std::string sOut(
+        output.begin(),
+        // Cut off excess null byte resulting in bad password matching
+        output.end() - 1
+    );
 
     auto split = stc::string::split(sOut, ":", 1);
-    if (pl != ol || !sOut.find(":") || split.size() != 2) {
+    if (pl != ol || split.size() != 2) {
         res.code = 500;
         spdlog::info("{} from {} is a sus payload", auth, req.remote_ip_address);
         HAZEL_JSON(res);
@@ -47,7 +67,7 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
     auto username = split.at(0);
     auto password = split.at(1);
 
-    auto& conf = server.getConfig();
+    const auto& conf = server.getConfig();
     auto proxyIt = conf.miniflux_proxies.find(username);
     if (proxyIt == conf.miniflux_proxies.end() || proxyIt->second.passphrase != password) {
         res.code = 404;
@@ -63,7 +83,7 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
 
     // TODO error handling
     nlohmann::json data = nlohmann::json::parse(req.body);
-    auto& proxy = proxyIt->second;
+    const auto& proxy = proxyIt->second;
 
     //spdlog::info("{}", data.dump());
     auto evType = data.at("event_type").get<std::string>();

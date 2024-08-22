@@ -53,9 +53,19 @@ struct DashboardLink {
     std::optional<nlohmann::json> config;
 };
 
+struct DashboardWeather {
+    std::string location;
+};
+
+struct DashboardStatModule {
+    StatModuleTypes type;
+
+};
+
 struct DashboardConfig {
     std::vector<DashboardLink> links;
 
+    DashboardWeather weather;
 };
 
 /**

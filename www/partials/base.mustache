@@ -13,8 +13,11 @@
     </head>
     <body>
         {{>partials/header.mustache}}
-        <main>
-            <div class="container">
+        <main class="flex-horizontal">
+            <ul class="sidebar flex-vertical sneaky-list flex-nogap">
+                <li><a href="/">🔗</a></li>
+            </ul>
+            <div class="container flex-item">
                 {{&Content}}
             </div>
         </main>

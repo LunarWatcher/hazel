@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <spdlog/spdlog.h>
+#include <fmt/format.h>
 
 namespace hazel {
 
@@ -17,7 +18,7 @@ HazelCore::HazelCore() {
     // so not sure if it really adds any value.
     std::ifstream ifs(path);
     if (!ifs) {
-        throw std::runtime_error("You need to create /etc/hazel/hazel.conf before running the program.");
+        throw std::runtime_error(fmt::format("You need to create {} before running the program.", path));
     }
 
     conf = nlohmann::json::parse(ifs);
