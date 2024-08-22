@@ -16,6 +16,10 @@ bool Updaters::updateDashboardData(DashboardData &data, long long& waitSecs) {
 
 bool Updaters::updateLinks(DashboardData& data, long long& waitSecs) {
     bool dirty = false;
+    if (!data.links) {
+        spdlog::error("Failed to update; data.links is nullptr");
+        return false;
+    }
     auto& links = *data.links;
     for (auto& link : links) {
         if (link.appType != LinkDynamicApp::_None) {
