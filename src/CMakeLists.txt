@@ -45,6 +45,7 @@ target_link_libraries(hazelsrc
     ${UUID_LIB}
     OpenSSL::Crypto
     SQLiteCpp
+    CLI11::CLI11
 )
 target_link_libraries(hazel hazelsrc)
 

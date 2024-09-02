@@ -31,7 +31,6 @@ void HazelCore::bootstrapDatabase() {
     db.initDatabase();
 }
 
-
 void HazelCore::prepareHandlers() {
 #ifdef HAZEL_DEBUG
     if (std::filesystem::exists("www-debug")) {
