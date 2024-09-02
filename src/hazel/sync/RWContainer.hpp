@@ -3,6 +3,7 @@
 #include <mutex>
 #include <shared_mutex>
 #include <functional>
+#include <type_traits>
 
 namespace hazel {
 
@@ -21,6 +22,7 @@ private:
 public:
     RWContainer() : data() {}
     RWContainer(const T& initVal) : data(initVal) {}
+    RWContainer(T&& initVal) : data(std::move(initVal)) {}
 
     void read(std::function<void(const T&)> callback) {
         std::shared_lock<std::shared_mutex> lock(mutex);
@@ -28,9 +30,13 @@ public:
     }
 
     /**
-     * Returns a copy of the underlying data.
+     * Returns a copy of the underlying data, if copyable.
      */
-    T copy() {
+    template <
+        typename S = T,
+        typename = std::enable_if_t<std::is_copy_assignable_v<S>>
+    >
+    S copy() {
         std::shared_lock<std::shared_mutex> lock(mutex);
         return data;
     }

@@ -8,7 +8,7 @@
 
 namespace hazel {
 
-HazelCore::HazelCore() {
+HazelCore::HazelCore() : db("./hazel.sqlite3") {
 #ifdef HAZEL_DEBUG
     std::string path = "./hazel.conf";
 #else
@@ -28,7 +28,7 @@ HazelCore::HazelCore() {
 }
 
 void HazelCore::bootstrapDatabase() {
-    spdlog::info("This is where database stuff will go");
+    db.initDatabase();
 }
 
 
@@ -97,15 +97,6 @@ void HazelCore::init() {
     HazelCore& p = HazelCore::getInstance();
 
     p.run(false);
-}
-
-std::shared_ptr<pqxx::connection> HazelCore::createDBConnection() {
-    return staticCreateDBConnection({});
-}
-
-// TODO: make this function use the raw Config struct
-std::shared_ptr<pqxx::connection> HazelCore::staticCreateDBConnection(const nlohmann::json& /* conf */) {
-    throw std::runtime_error("To be implemented when needed at a later, undefined time");
 }
 
 }

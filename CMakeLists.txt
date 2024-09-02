@@ -26,19 +26,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(SPDLOG_FMT_EXTERNAL ON CACHE STRING "" FORCE)
 # TODO: Disable this and use system curl. WE're already using system openssl
 set(CURL_ZLIB ON CACHE STRING "" FORCE)
+set(SQLITECPP_RUN_CPPLINT OFF CACHE STRING "" FORCE)
 
 set(CROW_FEATURES ssl compression CACHE STRING "" FORCE)
 set(CROW_INSTALL OFF CACHE STRING "" FORCE)
 
 include (FetchContent)
-
-# This has to be sourced from github because the apt version is grossly out of date,
-# and doesn't support std::optional out of the box :facedesk:
-FetchContent_Declare(pqxx
-    GIT_REPOSITORY https://github.com/jtv/libpqxx
-    GIT_TAG 7.9.2
-    EXCLUDE_FROM_ALL
-)
 FetchContent_Declare(crowcpp
     GIT_REPOSITORY https://github.com/CrowCpp/Crow
     GIT_TAG v1.2.0
@@ -67,19 +60,21 @@ FetchContent_Declare(cli11
     GIT_REPOSITORY https://github.com/CLIUtils/CLI11
     GIT_TAG v2.4.2
 )
+FetchContent_Declare(sqlitecpp
+    GIT_REPOSITORY https://github.com/SRombauts/SQLiteCpp
+    GIT_TAG 3.3.2
+)
 
-# Must be included before asio [not currently applicable, as asio is an external system dependency now]
-
-# This is overkill, but I'm copying all of this in from a now dead project also based around crowcpp,
-# so I'll deal with this when I'm awake
-FetchContent_MakeAvailable(crowcpp)
-FetchContent_MakeAvailable(pqxx)
-FetchContent_MakeAvailable(nlohmann)
-FetchContent_MakeAvailable(fmt)
-FetchContent_MakeAvailable(spdlog)
-FetchContent_MakeAvailable(cpr)
-FetchContent_MakeAvailable(stc)
-FetchContent_MakeAvailable(cli11)
+FetchContent_MakeAvailable(
+    crowcpp
+    sqlitecpp
+    nlohmann
+    fmt
+    spdlog
+    cpr
+    stc
+    cli11
+)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAZEL_DEBUG")

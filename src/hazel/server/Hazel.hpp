@@ -4,10 +4,10 @@
 #include <hazel/meta/Typedefs.hpp>
 #include "Config.hpp"
 #include "hazel/data/DashboardDataProvider.hpp"
+#include "hazel/data/Database.hpp"
 
 #include <chrono>
 #include <memory>
-#include <pqxx/pqxx>
 #include <system_error>
 
 #include <nlohmann/json.hpp>
@@ -18,6 +18,7 @@ class HazelCore {
 private:
 
     Config conf;
+    Database db;
 
     Server app;
 
@@ -42,9 +43,6 @@ public:
     void run(bool test);
 
     static void init();
-
-    std::shared_ptr<pqxx::connection> createDBConnection();
-    static std::shared_ptr<pqxx::connection> staticCreateDBConnection(const nlohmann::json& conf);
 
     const Config& getConfig() { return conf; }
     decltype(app)& getApp() { return app; }

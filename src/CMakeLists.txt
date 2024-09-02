@@ -18,6 +18,10 @@ set (SOURCE_FILES
     hazel/data/DashboardDataProvider.cpp
     hazel/data/dashboard/DashboardUpdaters.cpp
 
+    # Database shit
+    hazel/data/Database.cpp
+    hazel/data/db/Migration.cpp
+
     # Server (just the core shit)
     hazel/server/Hazel.cpp
 )
@@ -40,7 +44,7 @@ target_link_libraries(hazelsrc
     Crow::Crow
     ${UUID_LIB}
     OpenSSL::Crypto
-    pqxx
+    SQLiteCpp
 )
 target_link_libraries(hazel hazelsrc)
 
