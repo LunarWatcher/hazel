@@ -20,6 +20,7 @@ ConfigState::ConfigState(const std::string& path) : confPath(path) {
         ifs >> conf;
 
         if (conf.contains("core")) {
+            core = conf.at("core");
         } 
         if (conf.contains("miniflux-proxies")) {
             minifluxProxies = conf.at("miniflux-proxies");
