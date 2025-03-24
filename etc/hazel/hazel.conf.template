@@ -12,7 +12,7 @@
             "api_token": "generate with ntfy token add"
         }
     },
-    "miniflux_proxies": {   
+    "miniflux-proxies": {   
         "some_username_used_as_an_internal_identifier": {
             "events": ["new_entries"],
             "passphrase": "A password",
@@ -31,20 +31,8 @@
             }
         }
     },
-    "dashboard": {
-        "links": [
-            {
-                "name": "Pihole",
-                "type": "pihole",
-                "url": "https://pihole.lan",
-                "config": {
-                    "api_key": "abcd69420",
-                    "update_frequency": 600
-                }
-            }
-        ]
-    },
-    "server": {
-        "port": 6906
+    "core": {
+        "port": 6906,
+        "dataRoot": "/opt/hazel/dist/data"
     }
 }
