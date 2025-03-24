@@ -8,7 +8,7 @@ Note that this particular feature is primarily meant to be a way to forward the 
 
 ## Config
 ```json
-"miniflux_proxies": {   
+"miniflux-proxies": {   
     "some_username_used_as_an_internal_identifier": {
         "events": ["new_entries"],
         "passphrase": "A password",

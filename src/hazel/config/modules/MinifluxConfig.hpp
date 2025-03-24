@@ -9,7 +9,6 @@ namespace hazel {
 struct MinifluxProxy {
     std::vector<std::string> events;
     std::string passphrase;
-    std::string username;
     std::string adapter;
     std::string secret;
     std::optional<nlohmann::json> adapter_config;
