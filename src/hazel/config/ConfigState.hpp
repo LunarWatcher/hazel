@@ -15,6 +15,8 @@ private:
 
     std::map<std::string, std::shared_ptr<Adapter>> adapters;
 
+    void ensurePathsExist();
+
 public:
     ConfigState(const std::string& path);
 

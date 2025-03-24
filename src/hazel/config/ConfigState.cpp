@@ -51,6 +51,13 @@ ConfigState::ConfigState(const std::string& path) : confPath(path) {
         }
     }
 
+    ensurePathsExist();
+
+}
+
+void ConfigState::ensurePathsExist() {
+
+    std::filesystem::create_directories(core.dataRoot);
 
 }
 
