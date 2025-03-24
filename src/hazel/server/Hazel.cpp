@@ -9,14 +9,9 @@
 
 namespace hazel {
 
-HazelCore::HazelCore() : conf(
-
-#ifdef HAZEL_DEBUG
-    "./hazel.conf"
-#else
-    "/etc/hazel/hazel.conf"
-#endif
-), db("./hazel.sqlite3") {
+HazelCore::HazelCore(const std::string& configRoot) : conf(
+    configRoot
+), db(std::filesystem::path(conf.getCoreConfig().dataRoot) / "hazel.sqlite3"){
 }
 
 void HazelCore::bootstrapDatabase() {

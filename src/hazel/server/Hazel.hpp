@@ -22,9 +22,9 @@ private:
     std::string assetBaseDir;
     bool sslEnabled;
 
-    HazelCore();
 
 public:
+    HazelCore(const std::string& configRoot);
 
     const long long startedAt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()
         .time_since_epoch()).count();
@@ -50,7 +50,13 @@ public:
     bool isSSLEnabled() { return sslEnabled; }
 
     static HazelCore& getInstance() {
-        static HazelCore server;
+        static HazelCore server(
+#ifdef HAZEL_DEBUG
+    "./hazel.conf"
+#else
+    "/etc/hazel/hazel.conf"
+#endif
+        );
         return server;
     }
 
