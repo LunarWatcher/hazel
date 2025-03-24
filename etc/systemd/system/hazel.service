@@ -8,7 +8,7 @@ Restart=on-failure
 RestartSec=60s
 Type=idle
 WorkingDirectory=/opt/hazel/dist
-ExecStart=/opt/hazel/dist/bin/hazel
+ExecStart=/opt/hazel/dist/bin/hazel run
 User=hazel
 
 [Install]
