@@ -3,7 +3,6 @@
 #include "crow.h"
 
 #include "crow/middlewares/cookie_parser.h"
-#include "crow/middlewares/session.h"
 #include <chrono>
 #include <hazel/middlewares/BaseMiddlewares.hpp>
 

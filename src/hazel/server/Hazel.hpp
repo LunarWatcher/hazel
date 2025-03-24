@@ -2,13 +2,10 @@
 
 
 #include <hazel/meta/Typedefs.hpp>
-#include "Config.hpp"
-#include "hazel/data/DashboardDataProvider.hpp"
+#include "hazel/config/ConfigState.hpp"
 #include "hazel/data/Database.hpp"
 
 #include <chrono>
-#include <memory>
-#include <system_error>
 
 #include <nlohmann/json.hpp>
 
@@ -17,14 +14,13 @@ namespace hazel {
 class HazelCore {
 private:
 
-    Config conf;
+    ConfigState conf;
     Database db;
 
     Server app;
 
     std::string assetBaseDir;
     bool sslEnabled;
-    std::shared_ptr<DashboardDataProvider> dashData;
 
     HazelCore();
 
@@ -44,7 +40,7 @@ public:
 
     static void init();
 
-    const Config& getConfig() { return conf; }
+    const ConfigState& getConfig() { return conf; }
     decltype(app)& getApp() { return app; }
 
     const std::string& getAssetBaseDir() {
@@ -52,10 +48,6 @@ public:
     }
 
     bool isSSLEnabled() { return sslEnabled; }
-
-    DashboardDataProvider& getDashData() { 
-        return *dashData;
-    }
 
     static HazelCore& getInstance() {
         static HazelCore server;

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "cpr/response.h"
-#include "hazel/server/Config.hpp"
 #include <crow.h>
 #include <nlohmann/json.hpp>
 

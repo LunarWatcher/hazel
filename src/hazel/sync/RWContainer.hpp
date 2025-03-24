@@ -7,6 +7,7 @@
 
 namespace hazel {
 
+
 /**
  * Utility container for a data object with a mutex wrapper.
  *

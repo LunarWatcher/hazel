@@ -1,7 +1,9 @@
 #include "hazel/server/Hazel.hpp"
 
 #include "spdlog/spdlog.h"
+#ifndef HAZEL_DEBUG
 #include "spdlog/cfg/env.h"
+#endif
 
 #include "CLI/CLI.hpp"
 #include <filesystem>
@@ -12,9 +14,14 @@ int main(int argc, char** argv) {
 #else
     spdlog::cfg::load_env_levels();
 #endif
-    CLI::App app{
+    CLI::App app {
         "Homelab metaserver"
     };
+
+    app.require_subcommand();
+
+    auto* run = app.add_subcommand("run", "Starts the server");
+    auto* configWizard = app.add_subcommand("setup", "Starts an interactive setup system");
 
     std::filesystem::path configDir = 
 #ifdef HAZEL_DEBUG
@@ -29,5 +36,9 @@ int main(int argc, char** argv) {
 
     std::filesystem::create_directories(configDir);
 
-    hazel::HazelCore::getInstance().init();
+    if (configWizard->parsed()) {
+        std::cout << "Not currently in use or development" << std::endl;
+    } else if (run->parsed()) {
+        hazel::HazelCore::init();
+    }
 }

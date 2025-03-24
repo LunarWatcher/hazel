@@ -29,8 +29,9 @@ void Database::initDatabase() {
                 Password TEXT,
                 IsAdmin BOOLEAN
             );
-            )")
-            .exec(sdb);
+            )");
+
+        m.exec(sdb);
 
     });
 }

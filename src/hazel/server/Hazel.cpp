@@ -2,29 +2,21 @@
 #include "hazel/features/WebCore.hpp"
 #include "hazel/features/miniflux/MinifluxProxy.hpp"
 
-#include <fstream>
 #include <spdlog/spdlog.h>
 #include <fmt/format.h>
 
+#include <crow/compression.h>
+
 namespace hazel {
 
-HazelCore::HazelCore() : db("./hazel.sqlite3") {
-#ifdef HAZEL_DEBUG
-    std::string path = "./hazel.conf";
-#else
-    std::string path = "/etc/hazel/hazel.conf";
-#endif
-    // TODO: search path for multiple files, though this is primarily useful in debug mode,
-    // so not sure if it really adds any value.
-    std::ifstream ifs(path);
-    if (!ifs) {
-        throw std::runtime_error(fmt::format("You need to create {} before running the program.", path));
-    }
+HazelCore::HazelCore() : conf(
 
-    conf = nlohmann::json::parse(ifs);
-    dashData = std::make_shared<DashboardDataProvider>(
-        conf.dashboard
-    );
+#ifdef HAZEL_DEBUG
+    "./hazel.conf"
+#else
+    "/etc/hazel/hazel.conf"
+#endif
+), db("./hazel.sqlite3") {
 }
 
 void HazelCore::bootstrapDatabase() {
@@ -83,7 +75,7 @@ void HazelCore::run(bool test) {
 #ifdef HAZEL_DEBUG
             1337
 #else
-            conf.server.port
+            conf.getCoreConfig().port
 #endif
         );
 

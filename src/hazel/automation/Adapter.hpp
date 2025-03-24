@@ -1,6 +1,5 @@
 #pragma once
 
-#include "cpr/cprtypes.h"
 #include <nlohmann/json.hpp>
 #include <string>
 

@@ -7,6 +7,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+list (PREPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
+
 option (LINT "Whether or not to enable clang-tidy checks" OFF)
 option (LINT_WARNINGS_ARE_ERRORS "Whether or not to set -warnings-as-errors" OFF)
 option (SANITISE "Whether or not to enable -fsanitize=undefined" OFF)
@@ -22,19 +24,22 @@ endif()
 find_library(UUID_LIB uuid REQUIRED)
 find_package(OpenSSL REQUIRED)
 
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(SPDLOG_FMT_EXTERNAL ON CACHE STRING "" FORCE)
 # TODO: Disable this and use system curl. WE're already using system openssl
 set(CURL_ZLIB ON CACHE STRING "" FORCE)
 set(SQLITECPP_RUN_CPPLINT OFF CACHE STRING "" FORCE)
 
+# TODO: Check if newer versions of crow axed CROW_FEATURES
 set(CROW_FEATURES ssl compression CACHE STRING "" FORCE)
 set(CROW_INSTALL OFF CACHE STRING "" FORCE)
+set(CROW_ENABLE_COMPRESSION ON CACHE STRING "" FORCE)
 
 include (FetchContent)
 FetchContent_Declare(crowcpp
     GIT_REPOSITORY https://github.com/CrowCpp/Crow
-    GIT_TAG v1.2.0
+    GIT_TAG 2d6e1c1b37ec3cbca0b57f0ba1a6b24b6302cc6d
 )
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git

@@ -1,7 +1,6 @@
 #include "MinifluxProxy.hpp"
 #include "crow/app.h"
 #include "crow/common.h"
-#include "hazel/server/Config.hpp"
 #include "nlohmann/json_fwd.hpp"
 
 #include <hazel/server/Hazel.hpp>
@@ -41,22 +40,24 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
     // "For every 4 input bytes exactly 3 output bytes will be produced"
     // Hence the magic 3 / 4 division.
     // b64 is guaranteed to be divisible by 4 as well
-    const auto pl = (int) std::ceil(3 * b64.size() / 4);
-    //auto *output = reinterpret_cast<unsigned char *>(calloc(pl + 1, 1));
-    std::basic_string<unsigned char> output(pl, '\0');
-    const auto ol = EVP_DecodeBlock(
+    // ... but it looks like it's a bit wonky with null bytes, and occasionally add padding or something?
+    const auto expectedSourceSize = (int) (3 * b64.size() / 4);
+    std::basic_string<unsigned char> output(expectedSourceSize, '\0');
+    const auto actualLength = EVP_DecodeBlock(
         output.data(),
         reinterpret_cast<const unsigned char *>(b64.c_str()),
         (int) b64.size()
     );
+
     std::string sOut(
         output.begin(),
-        // Cut off excess null byte resulting in bad password matching
-        output.end() - 1
+        output.end()
     );
+    // Strip null bytes
+    sOut.erase(std::find(sOut.begin(), sOut.end(), '\0'), sOut.end());
 
     auto split = stc::string::split(sOut, ":", 1);
-    if (pl != ol || split.size() != 2) {
+    if (expectedSourceSize != actualLength || split.size() != 2) {
         res.code = 500;
         spdlog::info("{} from {} is a sus payload", auth, req.remote_ip_address);
         HAZEL_JSON(res);
@@ -64,18 +65,18 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
         return;
     }
 
-    auto username = split.at(0);
-    auto password = split.at(1);
+    std::string username = split.at(0);
+    std::string password = split.at(1);
 
     const auto& conf = server.getConfig();
-    auto proxyIt = conf.miniflux_proxies.find(username);
-    if (proxyIt == conf.miniflux_proxies.end() || proxyIt->second.passphrase != password) {
+    auto proxyIt = conf.getMinifluxProxies().find(username);
+    if (proxyIt == conf.getMinifluxProxies().end() || proxyIt->second.passphrase != password) {
         res.code = 404;
         spdlog::info(
             "{} failed to log into {} (exists: {})",
             req.remote_ip_address, 
             username, 
-            proxyIt == conf.miniflux_proxies.end()
+            proxyIt != conf.getMinifluxProxies().end()
         );
 
         HAZEL_JSON(res);
@@ -89,11 +90,11 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
 
     //spdlog::info("{}", data.dump());
     auto evType = data.at("event_type").get<std::string>();
-    auto adapter = conf.adapters.at(proxy.adapter);
+    auto adapter = conf.getAdapters().at(proxy.adapter);
     auto adapterConfig = proxyIt->second.adapter_config.value_or(nlohmann::json{});
 
     if (proxyIt->second.isEventEnabled(evType)) {
-        spdlog::info("Forwarding webhook from {} (IP: {})", username, req.remote_ip_address);
+        spdlog::info("Forwarding Miniflux webhook to {} (IP: {})", username, req.remote_ip_address);
 
         if (data.contains("entry")) {
             auto entry = data.at("entry");

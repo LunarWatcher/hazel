@@ -1,7 +1,6 @@
 #include "NtfyAdapter.hpp"
 #include "cpr/cpr.h"
 #include "cpr/ssl_options.h"
-#include "cpr/verbose.h"
 #include "spdlog/spdlog.h"
 
 namespace hazel {

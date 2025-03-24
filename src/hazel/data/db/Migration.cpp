@@ -31,7 +31,7 @@ void Migration::exec(SQLite::Database& db) {
         spdlog::error(
             "The Migrations table has been tampered with. Cannot resolve the current database state. "
             "If you've fucked around with the Migrations table, first, why? Second, this is not a bug. "
-            "You have to purge your entire database. If you haven't, please open a bug report. This should not normally "
+            "You have to purge your entire database. If you haven't fucked with the database, please open a bug report. This should not normally "
             "happen, unless you've done something weird to the database."
         );
         tx.rollback();

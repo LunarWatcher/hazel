@@ -12,18 +12,18 @@ set (SOURCE_FILES
     hazel/automation/adapters/NtfyAdapter.cpp
 
     # Utils
-    hazel/json/JsonImpl.cpp
 
     # Dashboard stuff
-    hazel/data/DashboardDataProvider.cpp
-    hazel/data/dashboard/DashboardUpdaters.cpp
 
-    # Database shit
+    # Database
     hazel/data/Database.cpp
     hazel/data/db/Migration.cpp
 
     # Server (just the core shit)
     hazel/server/Hazel.cpp
+
+    # Config
+    hazel/config/ConfigState.cpp
 )
 
 list(APPEND CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
@@ -31,6 +31,7 @@ list(APPEND CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 add_library(hazelsrc STATIC ${SOURCE_FILES})
 add_executable(hazel hazel/Main.cpp)
 
+#message(FATAL_ERROR ${CMAKE_CXX_FLAGS})
 target_include_directories(hazelsrc PUBLIC ./)
 
 target_link_libraries(hazelsrc

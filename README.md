@@ -18,9 +18,12 @@ The overall goal of the project is primarily to join together other self-hosted 
 
 ## Requirements
 
-* A Linux-based server
+* A Linux-based server; no other operating systems are or will be supported
 * C++20 compiler
 * CMake 3.28 (Pro tip: [CMake is available via pip](https://pypi.org/project/cmake/))
-* uuid-dev, libasio-dev (Debian-based names; look up your distro's package manager for the applicable packages). Additional dependencies are sourced automagically during the build process
+* OpenSSL
+* uuid-dev
+
+Most other dependencies are sourced automagically
 
 Docker is not supported, because it's annoying to work with and in this case, there's absolutely 0 advantages to supporting it.
