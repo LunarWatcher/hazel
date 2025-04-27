@@ -23,12 +23,12 @@ jobs:
       - name: Run build
         run: |
           mkdir build && cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release
-          make -j $(nproc)
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+          make -j $(nproc)       
       - name: Run test
         run: |
           cd build
-          cmake --build . --target test -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+          cmake --build . --target test
   lint:
     runs-on: ubuntu-24.04
     steps:
