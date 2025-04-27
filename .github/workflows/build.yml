@@ -28,7 +28,7 @@ jobs:
       - name: Run test
         run: |
           cd build
-          cmake --build . --target test
+          cmake --build . --target test -DCMAKE_POLICY_VERSION_MINIMUM=3.5
   lint:
     runs-on: ubuntu-24.04
     steps:
@@ -47,5 +47,5 @@ jobs:
       - name: Run build
         run: |
           mkdir build && cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DLINT=ON -DLINT_WARNINGS_ARE_ERRORS=ON
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DLINT=ON -DLINT_WARNINGS_ARE_ERRORS=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
           make -j $(nproc)

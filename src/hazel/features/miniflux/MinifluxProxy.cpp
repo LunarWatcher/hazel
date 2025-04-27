@@ -1,7 +1,6 @@
 #include "MinifluxProxy.hpp"
 #include "crow/app.h"
 #include "crow/common.h"
-#include "hazel/automation/Adapter.hpp"
 #include "nlohmann/json_fwd.hpp"
 
 #include <hazel/server/Hazel.hpp>
