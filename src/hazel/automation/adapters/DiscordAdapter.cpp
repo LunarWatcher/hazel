@@ -1,4 +1,5 @@
 #include "DiscordAdapter.hpp"
+#include "hazel/automation/Adapter.hpp"
 #include "spdlog/spdlog.h"
 
 #include <cpr/cpr.h>
@@ -10,7 +11,7 @@ DiscordAdapter::DiscordAdapter(const nlohmann::json& config) {
     this->username = config.value("username", "Hazel");
 }
 
-void DiscordAdapter::execute(const std::string& content, const nlohmann::json& adapterConfig) {
+void DiscordAdapter::execute(const std::string& content, const Adapter::Extras&, const nlohmann::json& adapterConfig) {
     auto body = nlohmann::json {
         {"username", adapterConfig.value("username", username)},
         {"content", content}

@@ -1,6 +1,5 @@
 #include "NtfyAdapter.hpp"
 #include "cpr/cpr.h"
-#include "cpr/ssl_options.h"
 #include "spdlog/spdlog.h"
 
 namespace hazel {
@@ -11,12 +10,17 @@ NtfyAdapter::NtfyAdapter(const nlohmann::json& config) {
     this->authHeader = config.at("api_token");
 }
 
-void NtfyAdapter::execute(const std::string& content, const nlohmann::json& adapterConfig) {
+void NtfyAdapter::execute(const std::string& content, const Adapter::Extras& extras, const nlohmann::json& adapterConfig) {
     auto topic = adapterConfig.value("topic", defaultTopic);
     auto priority = adapterConfig.value("priority", 3);
     auto title = adapterConfig.value("title", "Hazel update");
 
     cpr::Header headers;
+
+    if (extras.callbackUrl.has_value()) {
+        headers["Actions"] = "view, Open URL, " + extras.callbackUrl.value();
+        headers["Click"] = extras.callbackUrl.value();
+    }
 
     if (adapterConfig.contains("tags")) {
         headers["Tags"] = adapterConfig.at("tags");

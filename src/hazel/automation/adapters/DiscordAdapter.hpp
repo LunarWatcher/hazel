@@ -13,7 +13,7 @@ private:
 public:
     DiscordAdapter(const nlohmann::json& config);
 
-    virtual void execute(const std::string& content, const nlohmann::json& adapterConfig) override;
+    virtual void execute(const std::string& content, const Adapter::Extras& extras, const nlohmann::json& adapterConfig) override;
 };
 
 }

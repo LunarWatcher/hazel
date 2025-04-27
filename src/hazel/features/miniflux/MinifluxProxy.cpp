@@ -1,6 +1,7 @@
 #include "MinifluxProxy.hpp"
 #include "crow/app.h"
 #include "crow/common.h"
+#include "hazel/automation/Adapter.hpp"
 #include "nlohmann/json_fwd.hpp"
 
 #include <hazel/server/Hazel.hpp>
@@ -93,18 +94,20 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
     auto adapter = conf.getAdapters().at(proxy.adapter);
     auto adapterConfig = proxyIt->second.adapter_config.value_or(nlohmann::json{});
 
+
     if (proxyIt->second.isEventEnabled(evType)) {
         spdlog::info("Forwarding Miniflux webhook to {} (IP: {})", username, req.remote_ip_address);
 
         if (data.contains("entry")) {
             auto entry = data.at("entry");
-            auto url = entry.at("url");
-            adapter->execute(url, adapterConfig);
+            auto ce = detail::extractMinifluxEntry(entry);
+
+            adapter->execute(ce.content, ce, adapterConfig);
 
         } else if (data.contains("entries")) {
             for (auto& entry : data.at("entries")) {
-                auto url = entry.at("url");
-                adapter->execute(url, adapterConfig);
+                auto ce = detail::extractMinifluxEntry(entry);
+                adapter->execute(ce.content, ce, adapterConfig);
             }
 
         } else {
@@ -121,5 +124,15 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
 
     HAZEL_JSON(res);
     res.end(R"({"message": "ok"})");
+}
+
+
+hazel::detail::AdapterContent hazel::detail::extractMinifluxEntry(const nlohmann::json& entry) {
+    AdapterContent c;
+
+    c.content = entry.at("url");
+    c.callbackUrl = c.content;
+
+    return c;
 }
 
