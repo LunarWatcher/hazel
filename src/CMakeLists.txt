@@ -9,10 +9,6 @@ set (SOURCE_FILES
     hazel/automation/adapters/DiscordAdapter.cpp
     hazel/automation/adapters/NtfyAdapter.cpp
 
-    # Database
-    hazel/data/Database.cpp
-    hazel/data/db/Migration.cpp
-
     # Server (just the core shit)
     hazel/server/Hazel.cpp
 
@@ -35,7 +31,6 @@ target_link_libraries(hazelsrc
     nlohmann_json::nlohmann_json
     ${UUID_LIB}
     OpenSSL::Crypto
-    SQLiteCpp
     CLI11::CLI11
     magpie
 )

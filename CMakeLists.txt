@@ -52,18 +52,11 @@ FetchContent_Declare(cli11
     GIT_REPOSITORY https://github.com/CLIUtils/CLI11
     GIT_TAG v2.6.1
 )
-# Sloppified on 2026-01-24: https://github.com/SRombauts/SQLiteCpp/commit/9986f570bef00ca1029a2c19e4ce8fcbf206f775
-# 3.3.3 was released prior to this. Need to replace this with postgres, because sqlitecpp cannot be upgraded now.
-FetchContent_Declare(sqlitecpp
-    GIT_REPOSITORY https://github.com/SRombauts/SQLiteCpp
-    GIT_TAG 3.3.3
-)
 FetchContent_Declare(magpie
     GIT_REPOSITORY https://github.com/LunarWatcher/magpie
 )
 
 FetchContent_MakeAvailable(
-    sqlitecpp
     nlohmann
     stc
     cli11

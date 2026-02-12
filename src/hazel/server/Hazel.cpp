@@ -21,10 +21,6 @@ HazelCore::HazelCore(const std::string& configRoot)  {
     });
 }
 
-void HazelCore::bootstrapDatabase() {
-    context->db.initDatabase();
-}
-
 void HazelCore::prepareHandlers() {
     minilog::info("Loading endpoints...");
 
@@ -32,7 +28,6 @@ void HazelCore::prepareHandlers() {
 }
 
 void HazelCore::run(bool test) {
-    bootstrapDatabase();
     prepareHandlers();
 
     if (!test) {
