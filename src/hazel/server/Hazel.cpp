@@ -14,7 +14,7 @@ HazelCore::HazelCore(const std::string& configRoot)  {
 
     this->app = std::make_shared<magpie::App<Context>>(context, magpie::AppConfig {
         .port = context->conf.getCoreConfig().port,
-        // .ssl = magpie::SSLConfig::fromGeneratedCertificate()
+        .ssl = magpie::SSLConfig::fromGeneratedCertificate()
     });
     this->app->registerGlobalMiddlewares({
         std::make_shared<SecurityMetaHeaders>(),
