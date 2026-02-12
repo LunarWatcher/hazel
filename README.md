@@ -20,4 +20,12 @@ The overall goal of the project is primarily to join together other self-hosted 
 * A Linux-based server; no other operating systems are or will be supported
 * C++20 compiler
 * CMake 3.28 (Pro tip: [CMake is available via pip](https://pypi.org/project/cmake/))
-* Conan
+* Conan, or:
+    * nghttp2
+    * openssl
+    * zlib-ng
+    * asio (NOT the boost version!)
+    * libcurl
+    * libcpr
+    * Ubuntu does not provide libcpr, nor a new enough version of nghttp2. Using conan is strongly recommended.
+* Required with or without conan: libuuid-dev

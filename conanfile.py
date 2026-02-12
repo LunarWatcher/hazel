@@ -18,10 +18,10 @@ class Hazel(ConanFile):
         self.requires("asio/1.36.0")
         self.requires("zlib-ng/2.3.3")
 
-        self.test_requires(
+        self.requires(
             "libcurl/8.17.0"
         )
-        self.test_requires(
+        self.requires(
             "cpr/1.14.1"
         )
 
