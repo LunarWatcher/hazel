@@ -1,9 +1,5 @@
 #include "hazel/server/Hazel.hpp"
 
-#ifndef HAZEL_DEBUG
-#include "spdlog/cfg/env.h"
-#endif
-
 #include "CLI/CLI.hpp"
 #include <filesystem>
 
