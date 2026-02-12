@@ -31,6 +31,14 @@ The installer handles most of the setup process, but not everything.
 
 #### Option 1: Nginx
 
+> [!warning]
+>
+> Newer versions of hazel use magpie, a HTTP/2-only server framework. You need nginx 1.29.4 (December 2025) or newer to support HTTP/2 backend requests: https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version.
+>
+> On Ubuntu, you'll need first-party nginx PPA for the foreseeable future: https://nginx.org/en/linux_packages.html
+>
+> If you need HTTP/1.1 support, accept HTTP/1.1 on the nginx side. However, do be aware that https://http1mustdie.com/
+
 As previously spoiled, the installation process generates a file for nginx at `/etc/nginx/conf.d/hazel.conf`. If you provided the environment variables, it'll work out of the box, if your use-case happens to line up with mine. 
 
 If you didn't supply the environment variables, you **must** edit the file. If you supplied them, look it over anyway and make sure everything you want and need is in there, but there's at least a chance no further editing is required. 

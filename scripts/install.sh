@@ -40,7 +40,7 @@ cd /opt/hazel
 
 sudo -u $HAZEL_USER mkdir build
 cd build
-sudo -u $HAZEL_USER cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/hazel/dist/ 
+sudo -u $HAZEL_USER cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/hazel/dist/ -DHAZEL_ENABLE_CONAN=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 sudo -u $HAZEL_USER make -j $(nproc)
 sudo -u $HAZEL_USER make install
 
@@ -48,7 +48,8 @@ sudo -u $HAZEL_USER make install
 cat <<EOF | sudo tee /etc/nginx/conf.d/hazel.conf
 # Hazel
 server {
-    listen 443 ssl http2;
+    listen 443 ssl;
+    http2 on;
     server_name hazel.${HAZEL_DOMAIN:-FIXME};
     ssl_certificate         ${HAZEL_CERT:-FIXME};
     ssl_certificate_key     ${HAZEL_CERT_KEY:-FIXME};
@@ -56,20 +57,11 @@ server {
     location / {
         proxy_set_header   X-Real-IP \$remote_addr;
         proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header   Host \$host;
+        proxy_set_header   X-Forwarded-Host \$host;
         proxy_pass         http://localhost:6906/;
-        # Required to prevent downgrades during redirects
-        # This is caused by an oddity in how Crow handles redirects. See
-        #     https://github.com/CrowCpp/Crow/blob/ad337a8a868d1d6bc61e9803fc82f36c61f706de/include/crow/http_connection.h#L257
-        # for the code in question
-        proxy_redirect     http://$host/ https://$host/;
-        proxy_http_version 1.1;
-        proxy_set_header   Upgrade \$http_upgrade;
-        proxy_set_header   Connection "upgrade";
-
-        # Required for HTTP basic auth services
-        proxy_set_header   Authorization \$http_authorization;
-        proxy_pass_header  Authorization;
+        # Probably won't be necessary post-magpie
+        proxy_redirect     http://\$host/ https://\$host/;
+        proxy_http_version 2;
     }
 }
 EOF
