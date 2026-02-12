@@ -1,6 +1,6 @@
 #include "DiscordAdapter.hpp"
 #include "hazel/automation/Adapter.hpp"
-#include "spdlog/spdlog.h"
+#include "stc/minilog.hpp"
 
 #include <cpr/cpr.h>
 
@@ -24,7 +24,7 @@ void DiscordAdapter::execute(const std::string& content, const Adapter::Extras&,
     );
 
     if (res.status_code >= 400 || res.status_code < 100) {
-        spdlog::error("Failed to push to Discord webhook: {}", res.text);
+        minilog::error("Failed to push to Discord webhook: {}", res.text);
     }
 }
 

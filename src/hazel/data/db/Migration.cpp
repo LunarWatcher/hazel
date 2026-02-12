@@ -1,10 +1,10 @@
 #include "Migration.hpp"
 #include "SQLiteCpp/Statement.h"
 #include "SQLiteCpp/Transaction.h"
+#include "stc/minilog.hpp"
 
 #include <hazel/data/Database.hpp>
 
-#include <spdlog/spdlog.h>
 #include <stdexcept>
 
 namespace hazel {
@@ -28,7 +28,7 @@ void Migration::exec(SQLite::Database& db) {
     }
 
     if (headVersion < 0) {
-        spdlog::error(
+        minilog::error(
             "The Migrations table has been tampered with. Cannot resolve the current database state. "
             "If you've fucked around with the Migrations table, first, why? Second, this is not a bug. "
             "You have to purge your entire database. If you haven't fucked with the database, please open a bug report. This should not normally "
@@ -39,9 +39,9 @@ void Migration::exec(SQLite::Database& db) {
     }
 
     if (headVersion < (int64_t) this->queries.size() + versionOffset) {
-        spdlog::info("Database out of date (current version: {}, new version: {})", headVersion, queries.size());
+        minilog::info("Database out of date (current version: {}, new version: {})", headVersion, queries.size());
         for (size_t i = headVersion - versionOffset; i < queries.size(); ++i) {
-            spdlog::info("Updating to v{}", i + 1 + versionOffset);
+            minilog::info("Updating to v{}", i + 1 + versionOffset);
             db.exec(queries.at(i + versionOffset));
         }
 
@@ -54,14 +54,14 @@ void Migration::exec(SQLite::Database& db) {
 
         if (stmt.exec() == 0) {
             tx.rollback();
-            spdlog::error("Failed to upgrade database");
+            minilog::error("Failed to upgrade database");
             throw std::runtime_error("Migration error");
         }
 
-        spdlog::info("Update successful.");
+        minilog::info("Update successful.");
 
     } else {
-        spdlog::info("Database up-to-date (version: {})", headVersion);
+        minilog::info("Database up-to-date (version: {})", headVersion);
     }
 
 
@@ -70,7 +70,7 @@ void Migration::exec(SQLite::Database& db) {
 }
 
 void Migration::prepMetatables(SQLite::Database& db) {
-    spdlog::info("Initialising migration table...");
+    minilog::info("Initialising migration table...");
     SQLite::Transaction tx(db);
     db.exec(R"(
     CREATE TABLE IF NOT EXISTS Migrations (

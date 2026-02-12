@@ -1,7 +1,9 @@
 #pragma once
 
 #include "hazel/automation/Adapter.hpp"
-#include <crow.h>
+#include "hazel/server/Context.hpp"
+#include "magpie/transfer/Request.hpp"
+#include "magpie/transfer/Response.hpp"
 #include <nlohmann/json.hpp>
 
 namespace hazel {
@@ -9,8 +11,7 @@ namespace hazel {
 class HazelCore;
 
 extern void InitMinifluxProxy(HazelCore& server);
-
-extern void minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::response& res);
+extern void minifluxForwardToProxy(Context*, magpie::Request& req, magpie::Response& res);
 
 namespace detail {
 

@@ -1,6 +1,6 @@
 #include "NtfyAdapter.hpp"
 #include "cpr/cpr.h"
-#include "spdlog/spdlog.h"
+#include "stc/minilog.hpp"
 
 namespace hazel {
 
@@ -33,7 +33,7 @@ void NtfyAdapter::execute(const std::string& content, const Adapter::Extras& ext
     auto url = cpr::Url {
         this->destUrl + "/" + topic
     };
-    spdlog::info("URL: {}", url.str());
+    minilog::info("URL: {}", url.str());
     headers["Authorization"] = "Bearer " + this->authHeader;
 
     auto res = cpr::Post(
@@ -43,9 +43,9 @@ void NtfyAdapter::execute(const std::string& content, const Adapter::Extras& ext
         // TODO: make configurable
         cpr::VerifySsl(false)
     );
-    spdlog::info("{}", res.text);
+    minilog::info("{}", res.text);
     if (res.status_code >= 400 || res.status_code < 100) {
-        spdlog::error("Failed to push to Ntfy ({}): {}", res.url.str(), res.text);
+        minilog::error("Failed to push to Ntfy ({}): {}", res.url.str(), res.text);
     }
 }
 }

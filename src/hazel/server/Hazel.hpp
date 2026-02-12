@@ -1,9 +1,7 @@
 #pragma once
 
-
-#include <hazel/meta/Typedefs.hpp>
-#include "hazel/config/ConfigState.hpp"
-#include "hazel/data/Database.hpp"
+#include "hazel/server/Context.hpp"
+#include "magpie/App.hpp"
 
 #include <chrono>
 
@@ -14,10 +12,8 @@ namespace hazel {
 class HazelCore {
 private:
 
-    ConfigState conf;
-    Database db;
-
-    Server app;
+    std::shared_ptr<Context> context;
+    std::shared_ptr<magpie::App<Context>> app;
 
     std::string assetBaseDir;
     bool sslEnabled;
@@ -40,7 +36,6 @@ public:
 
     static void init();
 
-    const ConfigState& getConfig() { return conf; }
     decltype(app)& getApp() { return app; }
 
     const std::string& getAssetBaseDir() {
@@ -52,9 +47,9 @@ public:
     static HazelCore& getInstance() {
         static HazelCore server(
 #ifdef HAZEL_DEBUG
-    "./hazel.conf"
+            "./hazel.conf"
 #else
-    "/etc/hazel/hazel.conf"
+            "/etc/hazel/hazel.conf"
 #endif
         );
         return server;

@@ -1,7 +1,18 @@
 cmake_minimum_required(VERSION 3.28)
+
+if (HAZEL_ENABLE_CONAN)
+    include(FetchContent)
+    FetchContent_Declare(conan
+        GIT_REPOSITORY https://github.com/conan-io/cmake-conan
+        GIT_TAG develop2
+    )
+    FetchContent_MakeAvailable(conan)
+    set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES ${conan_SOURCE_DIR}/conan_provider.cmake)
+endif()
+
 project(hazel VERSION 0.0.1)
 
-set (CMAKE_CXX_STANDARD 20)
+set (CMAKE_CXX_STANDARD 23)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -23,62 +34,40 @@ endif()
 
 find_library(UUID_LIB uuid REQUIRED)
 find_package(OpenSSL REQUIRED)
-
+find_package(cpr REQUIRED)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(SPDLOG_FMT_EXTERNAL ON CACHE STRING "" FORCE)
-# TODO: Disable this and use system curl. WE're already using system openssl
-set(CURL_ZLIB ON CACHE STRING "" FORCE)
 set(SQLITECPP_RUN_CPPLINT OFF CACHE STRING "" FORCE)
 
-# TODO: Check if newer versions of crow axed CROW_FEATURES
-set(CROW_FEATURES ssl compression CACHE STRING "" FORCE)
-set(CROW_INSTALL OFF CACHE STRING "" FORCE)
-set(CROW_ENABLE_COMPRESSION ON CACHE STRING "" FORCE)
-
 include (FetchContent)
-FetchContent_Declare(crowcpp
-    GIT_REPOSITORY https://github.com/CrowCpp/Crow
-    GIT_TAG 2d6e1c1b37ec3cbca0b57f0ba1a6b24b6302cc6d
-)
-FetchContent_Declare(fmt
-    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG 11.0.2
-)
-FetchContent_Declare(cpr
-    GIT_REPOSITORY https://github.com/libcpr/cpr.git
-    GIT_TAG 1.10.5
-    EXCLUDE_FROM_ALL
-)
+
 FetchContent_Declare(nlohmann
     GIT_REPOSITORY https://github.com/nlohmann/json
     GIT_TAG v3.11.2
-)
-FetchContent_Declare(spdlog
-    GIT_REPOSITORY https://github.com/gabime/spdlog
-    GIT_TAG v1.14.1
 )
 FetchContent_Declare(stc
     GIT_REPOSITORY https://github.com/LunarWatcher/stc
 )
 FetchContent_Declare(cli11
     GIT_REPOSITORY https://github.com/CLIUtils/CLI11
-    GIT_TAG v2.4.2
+    GIT_TAG v2.6.1
 )
+# Sloppified on 2026-01-24: https://github.com/SRombauts/SQLiteCpp/commit/9986f570bef00ca1029a2c19e4ce8fcbf206f775
+# 3.3.3 was released prior to this. Need to replace this with postgres, because sqlitecpp cannot be upgraded now.
 FetchContent_Declare(sqlitecpp
     GIT_REPOSITORY https://github.com/SRombauts/SQLiteCpp
-    GIT_TAG 3.3.2
+    GIT_TAG 3.3.3
+)
+FetchContent_Declare(magpie
+    GIT_REPOSITORY https://github.com/LunarWatcher/magpie
 )
 
 FetchContent_MakeAvailable(
-    crowcpp
     sqlitecpp
     nlohmann
-    fmt
-    spdlog
-    cpr
     stc
     cli11
+    magpie
 )
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")

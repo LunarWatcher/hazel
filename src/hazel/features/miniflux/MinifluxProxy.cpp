@@ -1,39 +1,41 @@
 #include "MinifluxProxy.hpp"
-#include "crow/app.h"
-#include "crow/common.h"
-#include "nlohmann/json_fwd.hpp"
+#include "magpie/transfer/StatusCode.hpp"
+#include "nlohmann/json.hpp"
+#include "stc/minilog.hpp"
 
 #include <hazel/server/Hazel.hpp>
 #include <hazel/meta/Macros.hpp>
 
-#include <spdlog/spdlog.h>
 #include <stc/StringUtil.hpp>
 #include <cpr/cpr.h>
 
 #include <openssl/evp.h>
 
 void hazel::InitMinifluxProxy(HazelCore& server) {
-    CROW_ROUTE(server.getApp(), "/api/miniflux/webhook")
-        .methods(crow::HTTPMethod::POST)
-        (HAZEL_CALLBACK_BINDING(minifluxForwardToProxy));
-
+    server.getApp()->route<"/api/miniflux/webhook", magpie::Method::Post>(
+        &hazel::minifluxForwardToProxy
+    );
 }
 
-void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::response& res) {
-    auto auth = req.get_header_value("Authorization"); // Thank you httpbin
+void hazel::minifluxForwardToProxy(Context* ctx, magpie::Request& req, magpie::Response& res) {
+    auto auth = req.headers["authorization"];
     if (auth.empty() || !auth.starts_with("Basic ")) {
-        res.code = 400;
-        HAZEL_JSON(res);
-        res.end("{\"message\": \"Malformed or missing authorization header\"}");
+        res = magpie::Response(
+            magpie::Status::BadRequest,
+            R"({"message": "Malformed or missing authorization header"})",
+            "application/json"
+        );
         return;
     }
 
     auto b64 = auth.substr(auth.find(' ') + 1);
 
     if (b64.size() % 4 != 0) {
-        res.code = 400;
-        HAZEL_JSON(res);
-        res.end(R"s({"message": "Malformed or missing authorization header. (Did you correctly base64 encode?)"})s");
+        res = magpie::Response(
+            magpie::Status::BadRequest,
+            R"({"message": "Malformed or missing authorization header. Did you correctly base64-encode?"})",
+            "application/json"
+        );
         return;
     }
 
@@ -58,29 +60,34 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
 
     auto split = stc::string::split(sOut, ":", 1);
     if (expectedSourceSize != actualLength || split.size() != 2) {
-        res.code = 500;
-        spdlog::info("{} from {} is a sus payload", auth, req.remote_ip_address);
-        HAZEL_JSON(res);
-        res.end(R"({"message": "Malformed authorisation header. Try again"})");
+        minilog::warn("{} from {} is a sus payload", auth, "NOT IMPLEMENTED lol");
+        res = magpie::Response(
+            magpie::Status::BadRequest,
+            R"({"message": "Malformed or missing authorization header"})",
+            "application/json"
+        );
         return;
     }
 
     std::string username = split.at(0);
     std::string password = split.at(1);
 
-    const auto& conf = server.getConfig();
+    const auto& conf = ctx->conf;
     auto proxyIt = conf.getMinifluxProxies().find(username);
     if (proxyIt == conf.getMinifluxProxies().end() || proxyIt->second.passphrase != password) {
-        res.code = 404;
-        spdlog::info(
+        minilog::info(
             "{} failed to log into {} (exists: {})",
-            req.remote_ip_address, 
+            "IP address not implemented", 
             username, 
             proxyIt != conf.getMinifluxProxies().end()
         );
+        minilog::info("{}", password);
 
-        HAZEL_JSON(res);
-        res.end(R"({"message": "Webhook not found"})");
+        res = magpie::Response(
+            magpie::Status::NotFound,
+            R"({"message": "Webhook not found"})",
+            "application/json"
+        );
         return;
     }
 
@@ -95,7 +102,7 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
 
 
     if (proxyIt->second.isEventEnabled(evType)) {
-        spdlog::info("Forwarding Miniflux webhook to {} (IP: {})", username, req.remote_ip_address);
+        minilog::info("Forwarding Miniflux webhook to {} (IP: {})", username, "NOT IMPLEMENTED");
 
         if (data.contains("entry")) {
             auto entry = data.at("entry");
@@ -110,19 +117,24 @@ void hazel::minifluxForwardToProxy(HazelCore& server, crow::request& req, crow::
             }
 
         } else {
-            spdlog::info("No fucking clue how to parse {}", data.dump(4));
+            minilog::info("No fucking clue how to parse {}", data.dump(4));
 
-            HAZEL_JSON(res);
-            res.code = 500;
-            res.end(R"({"message": "Unknown format"})");
+            res = magpie::Response(
+                magpie::Status::InternalServerError,
+                R"({"message": "Not sure how to parse miniflux data"})",
+                "application/json"
+            );
             return;
         }
     }
     // If the event isn't enabled, return 200 anyway. There's no point in sending an error to the server
     // when there isn't an error.
 
-    HAZEL_JSON(res);
-    res.end(R"({"message": "ok"})");
+    res = magpie::Response(
+        magpie::Status::OK,
+        R"({"message": "OK"})",
+        "application/json"
+    );
 }
 
 

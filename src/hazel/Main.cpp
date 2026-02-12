@@ -1,6 +1,5 @@
 #include "hazel/server/Hazel.hpp"
 
-#include "spdlog/spdlog.h"
 #ifndef HAZEL_DEBUG
 #include "spdlog/cfg/env.h"
 #endif
@@ -9,11 +8,6 @@
 #include <filesystem>
 
 int main(int argc, char** argv) {
-#ifdef HAZEL_DEBUG
-    spdlog::set_level(spdlog::level::debug);
-#else
-    spdlog::cfg::load_env_levels();
-#endif
     CLI::App app {
         "Homelab metaserver"
     };
