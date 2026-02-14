@@ -60,7 +60,7 @@ void hazel::minifluxForwardToProxy(Context* ctx, magpie::Request& req, magpie::R
 
     auto split = stc::string::split(sOut, ":", 1);
     if (expectedSourceSize != actualLength || split.size() != 2) {
-        minilog::warn("{} from {} is a sus payload", auth, "NOT IMPLEMENTED lol");
+        minilog::warn("{} from {} is a sus payload", auth, req.ipAddr);
         res = magpie::Response(
             magpie::Status::BadRequest,
             R"({"message": "Malformed or missing authorization header"})",
@@ -77,7 +77,7 @@ void hazel::minifluxForwardToProxy(Context* ctx, magpie::Request& req, magpie::R
     if (proxyIt == conf.getMinifluxProxies().end() || proxyIt->second.passphrase != password) {
         minilog::info(
             "{} failed to log into {} (exists: {})",
-            "IP address not implemented", 
+            req.ipAddr,
             username, 
             proxyIt != conf.getMinifluxProxies().end()
         );
@@ -102,7 +102,7 @@ void hazel::minifluxForwardToProxy(Context* ctx, magpie::Request& req, magpie::R
 
 
     if (proxyIt->second.isEventEnabled(evType)) {
-        minilog::info("Forwarding Miniflux webhook to {} (IP: {})", username, "NOT IMPLEMENTED");
+        minilog::info("Forwarding Miniflux webhook to {} (IP: {})", username, req.ipAddr);
 
         if (data.contains("entry")) {
             auto entry = data.at("entry");
