@@ -13,6 +13,7 @@ if ! sudo -u $HAZEL_USER HOME="/home/$HAZEL_USER" make -j $(nproc) install; then
     echo "  To enable conan, you can run:"
     echo '    sudo -u ${HAZEL_USER:-hazel} cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/hazel/dist/ -DHAZEL_ENABLE_CONAN=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5'
     echo "  And then run the update script again. Note that you need conan installed."
+    exit 1
 fi
 sudo systemctl restart hazel
 
