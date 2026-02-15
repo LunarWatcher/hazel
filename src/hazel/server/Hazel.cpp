@@ -2,6 +2,7 @@
 #include "hazel/features/miniflux/MinifluxProxy.hpp"
 #include "hazel/middlewares/BaseMiddlewares.hpp"
 #include "magpie/config/AppConfig.hpp"
+#include "magpie/logger/Logger.hpp"
 
 #include <stc/minilog.hpp>
 
