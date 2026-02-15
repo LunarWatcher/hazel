@@ -61,10 +61,10 @@ install(
         PATTERN *.so*
         PATTERN *.a EXCLUDE
 )
-install(
-    DIRECTORY ${CMAKE_BINARY_DIR}/www
-    DESTINATION .
-)
+# install(
+#     DIRECTORY ${CMAKE_BINARY_DIR}/www
+#     DESTINATION .
+# )
 
 if (LINT)
     find_program(
