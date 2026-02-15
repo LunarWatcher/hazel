@@ -40,6 +40,7 @@ HazelCore::HazelCore(const std::string& configRoot)  {
                 break;
         }
     };
+    std::ios_base::sync_with_stdio(false);
 }
 
 void HazelCore::prepareHandlers() {
