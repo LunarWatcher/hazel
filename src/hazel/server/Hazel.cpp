@@ -20,6 +20,7 @@ HazelCore::HazelCore(const std::string& configRoot)  {
     this->app->registerGlobalMiddlewares({
         std::make_shared<SecurityMetaHeaders>(),
     });
+    minilog::config().level = minilog::Level::Debug;
     magpie::logger::config().logger = [](auto level, const auto& msg) {
         switch (level) {
             case magpie::logger::Level::debug:
