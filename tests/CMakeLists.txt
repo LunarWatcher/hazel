@@ -1,5 +1,7 @@
 add_executable(tests 
     src/Main.cpp
+
+    src/miniflux/MinifluxProxyTests.cpp
 )
 
 Include(FetchContent)
