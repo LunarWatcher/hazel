@@ -1,6 +1,7 @@
 # Notes:
 # - clang-analyzer-optin.core.EnumCastOutOfRange: Useful, complains about std::filesystem::file_size for no fucking reason
 # - clang-analyzer-cplusplus.NewDeleteLeaks: borked (https://github.com/llvm/llvm-project/issues/55219)
+# - portability-template-virtual-member-function: not useful
 Checks: >
   -*,
   bugprone-*,
@@ -19,6 +20,7 @@ Checks: >
   -misc-include-cleaner,
   -performance-avoid-endl,
   -performance-enum-size,
+  -portability-template-virtual-member-function,
   -readability-function-cognitive-complexity,
   -readability-make-member-function-const,
   -readability-named-parameter,
