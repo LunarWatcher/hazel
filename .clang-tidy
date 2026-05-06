@@ -21,6 +21,7 @@ Checks: >
   -performance-avoid-endl,
   -performance-enum-size,
   -portability-template-virtual-member-function,
+  -portability-avoid-pragma-once,
   -readability-function-cognitive-complexity,
   -readability-make-member-function-const,
   -readability-named-parameter,
