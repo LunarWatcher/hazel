@@ -43,14 +43,14 @@ include (FetchContent)
 
 FetchContent_Declare(nlohmann
     GIT_REPOSITORY https://github.com/nlohmann/json
-    GIT_TAG v3.11.2
+    GIT_TAG v3.12.0
 )
 FetchContent_Declare(stc
     GIT_REPOSITORY https://github.com/LunarWatcher/stc
 )
 FetchContent_Declare(cli11
     GIT_REPOSITORY https://github.com/CLIUtils/CLI11
-    GIT_TAG v2.6.1
+    GIT_TAG v2.6.2
 )
 FetchContent_Declare(magpie
     GIT_REPOSITORY https://github.com/LunarWatcher/magpie

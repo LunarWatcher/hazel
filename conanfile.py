@@ -15,7 +15,6 @@ class Hazel(ConanFile):
     def requirements(self):
         self.requires("libnghttp2/1.66.0")
         self.requires("openssl/3.6.0")
-        self.requires("asio/1.36.0")
         self.requires("zlib-ng/2.3.3")
 
         self.requires(

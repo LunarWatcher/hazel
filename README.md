@@ -23,9 +23,10 @@ The overall goal of the project is primarily to join together other self-hosted 
 * Conan, or:
     * nghttp2
     * openssl
-    * zlib-ng
-    * asio (NOT the boost version!)
+    * zlib
     * libcurl
     * libcpr
     * Ubuntu does not provide libcpr, nor a new enough version of nghttp2. Using conan is strongly recommended.
 * Required with or without conan: libuuid-dev
+
+Hazel additionally sources [magpie](//codeberg.org/LunarWatcher/magpie) and [raven](//codeberg.org/LunarWatcher/raven), which provide the actual server framework raven is built on.

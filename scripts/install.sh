@@ -36,8 +36,6 @@ sudo chown -R $HAZEL_USER /opt/hazel
 sudo -u $HAZEL_USER git clone https://github.com/LunarWatcher/hazel
 cd /opt/hazel
 
-# TODO check if debian and run the dependency script
-
 sudo -u $HAZEL_USER mkdir build
 cd build
 sudo -u $HAZEL_USER cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/hazel/dist/ -DHAZEL_ENABLE_CONAN=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
